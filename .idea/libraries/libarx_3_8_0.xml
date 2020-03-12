@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="libarx-3.8.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/gradle/libarx-3.8.0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/libs/gradle/libarx-3.8.0-doc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/gradle/libarx-3.8.0-dev-doc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/libs/gradle/libarx-3.8.0-src.jar!/" />
+    </SOURCES>
+  </library>
+</component>
