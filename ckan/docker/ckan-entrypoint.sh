@@ -40,10 +40,10 @@ write_config () {
   ckan generate config "$CONFIG"
 }
 
-# Wait for PostgreSQL
-#while ! pg_isready -h db -U postgres; do
-#  sleep 1;
-#done
+Wait for PostgreSQL
+while ! pg_isready -h db -U postgres; do
+  sleep 1;
+done
 
 # If we don't already have a config file, bootstrap
 if [ ! -e "$CONFIG" ]; then

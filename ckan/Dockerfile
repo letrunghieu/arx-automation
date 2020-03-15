@@ -1,5 +1,5 @@
 # See CKAN docs on installation from Docker Compose on usage
-FROM debian:stretch
+FROM debian:buster
 MAINTAINER Open Knowledge
 
 # Install required system packages
@@ -41,15 +41,17 @@ COPY docker/ckan-entrypoint.sh "/ckan-entrypoint.sh"
 RUN ckan-pip install -U pip && \
     ckan-pip install --upgrade --no-cache-dir -r $CKAN_HOME/src/ckan/requirement-setuptools.txt && \
     ckan-pip install --upgrade --no-cache-dir -r $CKAN_HOME/src/ckan/requirements.txt && \
+    ckan-pip install --upgrade --no-cache-dir -r $CKAN_HOME/src/ckan/dev-requirements.txt && \
     ckan-pip install -e $CKAN_HOME/src/ckan/ && \
     ln -s $CKAN_HOME/src/ckan/ckan/config/who.ini $CKAN_CONFIG/who.ini && \
     chmod +x /ckan-entrypoint.sh && \
     chown -R ckan:ckan $CKAN_HOME $CKAN_VENV $CKAN_CONFIG $CKAN_STORAGE_PATH && \
     ln -s $CKAN_HOME/bin/ckan /usr/local/bin/ckan
 
-# ENTRYPOINT ["/ckan-entrypoint.sh"]
 
 USER ckan
 EXPOSE 5000
 
-CMD ["ckan","-c","/etc/ckan/ckan.ini"]
+ENTRYPOINT ["/ckan-entrypoint.sh"]
+
+CMD ["ckan","-c","/etc/ckan/ckan.ini", "run", "-H", "0.0.0.0"]

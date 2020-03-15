@@ -13,7 +13,7 @@ services:
   ckan:
     container_name: ckan
     build:
-      context: ../../
+      context: ../../../
       args:
           - CKAN_SITE_URL=${CKAN_SITE_URL}
     links:
