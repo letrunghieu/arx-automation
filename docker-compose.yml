@@ -47,7 +47,7 @@ services:
 
   db:
     build:
-      context: ckan/ckan
+      context: ckan/src
       dockerfile: contrib/docker/postgresql/Dockerfile
       args:
         - DS_RO_PASS=${DATASTORE_READONLY_PASSWORD}
@@ -62,7 +62,7 @@ services:
 
   solr:
     build:
-      context: ckan/ckan
+      context: ckan/src
       dockerfile: contrib/docker/solr/Dockerfile
     volumes:
       - solr_data:/opt/solr/server/solr/ckan/data

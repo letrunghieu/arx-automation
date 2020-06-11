@@ -36,10 +36,10 @@ RUN mkdir -p $CKAN_CONFIG $CKAN_STORAGE_PATH && \
     ln -s $CKAN_HOME/bin/pip3 /usr/local/bin/ckan-pip
 
 # Setup CKAN
-ADD ./ckan $CKAN_HOME/src/ckan/
-COPY docker/ckan-entrypoint.sh "/ckan-entrypoint.sh"
+COPY ./src $CKAN_HOME/src/ckan/
+COPY ./docker/ckan-entrypoint.sh "/ckan-entrypoint.sh"
 
-RUN ckan-pip install -U pip && \
+RUN ckan-pip install -U pip PasteDeploy && \
     ckan-pip install --upgrade --no-cache-dir -r $CKAN_HOME/src/ckan/requirement-setuptools.txt && \
     ckan-pip install --upgrade --no-cache-dir -r $CKAN_HOME/src/ckan/requirements.txt && \
     ckan-pip install --upgrade --no-cache-dir -r $CKAN_HOME/src/ckan/dev-requirements.txt && \
