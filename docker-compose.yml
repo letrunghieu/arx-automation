@@ -8,6 +8,7 @@ volumes:
   ckan_storage:
   pg_data:
   solr_data:
+  broker-rabbitmq-data:
 
 services:
   ckan:
@@ -69,3 +70,17 @@ services:
 
   redis:
     image: redis:latest
+
+  broker:
+    image: rabbitmq:3-management
+    hostname: broker
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+    - 15672:15672
+    - 5672:5672
+    volumes:
+    - broker-rabbitmq-data:/var/lib/rabbitmq:rw
