@@ -18,7 +18,6 @@ Cần có `docker` và `docker-compose`.
 _Chỉ copy file `.env.template` nếu chưa có file `.env`._
 
 ```sh
-cd ckan/ckan/contrib/docker
 cp .env.template .env
 docker-compose up
 ```
