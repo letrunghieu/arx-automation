@@ -2,6 +2,13 @@
 
 ## Yêu cầu
 
+Sau khi clone về:
+
+```sh
+git submodules init
+git submodules update --remote
+```
+
 ... WIP ...
 
 ## Chạy CKAN local
