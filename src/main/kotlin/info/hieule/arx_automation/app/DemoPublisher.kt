@@ -1,5 +1,3 @@
-@file:JvmName("DemoPublisher")
-
 package info.hieule.arx_automation.app
 
 import com.rabbitmq.client.ConnectionFactory

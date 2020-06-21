@@ -20,7 +20,12 @@ dependencies {
 }
 
 tasks.create<JavaExec>("demoPublisher") {
-    main = "info.hieule.arx_automation.app.DemoPublisher"
+    main = "info.hieule.arx_automation.app.DemoPublisherKt"
+    classpath = sourceSets["main"].runtimeClasspath
+}
+
+tasks.create<JavaExec>("demoConsumer") {
+    main = "info.hieule.arx_automation.app.DemoConsumerKt"
     classpath = sourceSets["main"].runtimeClasspath
 }
 
