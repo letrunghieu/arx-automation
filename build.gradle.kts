@@ -16,6 +16,8 @@ dependencies {
     testCompileOnly(group = "junit", name = "junit", version = "4.12")
     implementation(files("libs/gradle/libarx-3.8.0.jar"))
     implementation(group = "com.rabbitmq", name = "amqp-client", version = "5.9.0")
+    implementation(group = "commons-cli", name = "commons-cli", version = "1.4")
+    implementation(group = "org.litote.kmongo", name = "kmongo", version = "4.1.0")
     implementation(kotlin("stdlib-jdk8"))
 }
 
@@ -26,6 +28,11 @@ tasks.create<JavaExec>("demoPublisher") {
 
 tasks.create<JavaExec>("demoConsumer") {
     main = "info.hieule.arx_automation.app.DemoConsumerKt"
+    classpath = sourceSets["main"].runtimeClasspath
+}
+
+tasks.create<JavaExec>("frontEnd") {
+    main = "info.hieule.arx_automation.app.front_end.ApplicationKt"
     classpath = sourceSets["main"].runtimeClasspath
 }
 
