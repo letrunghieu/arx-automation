@@ -19,6 +19,7 @@ dependencies {
     implementation(group = "commons-cli", name = "commons-cli", version = "1.4")
     implementation(group = "org.litote.kmongo", name = "kmongo", version = "4.1.0")
     implementation(group = "org.litote.kmongo", name = "kmongo-id", version = "4.1.0")
+    implementation(group = "org.apache.commons", name = "commons-csv", version = "1.8")
     implementation(kotlin("stdlib-jdk8"))
 }
 

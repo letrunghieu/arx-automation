@@ -10,9 +10,10 @@ class MongoDbDatasetWriter(
     private val collectionName: String
 ) : DatasetWriter {
     override fun write(dataset: Dataset): Dataset {
-        val collection = this.database.getCollection<Dataset>("originalDatasets")
+        val collection = this.database.getCollection<Dataset>(this.collectionName)
 
-        val result = collection.insertOne(dataset)
+        collection.insertOne(dataset)
+
         return dataset;
     }
 }

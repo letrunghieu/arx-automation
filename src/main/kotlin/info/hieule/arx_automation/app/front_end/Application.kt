@@ -1,12 +1,9 @@
 package info.hieule.arx_automation.app.front_end
 
-import com.mongodb.ConnectionString
-import com.mongodb.MongoClientSettings
-import com.mongodb.MongoCredential
 import info.hieule.arx_automation.app.adapter.dataset.MongoDbDatasetWriter
 import info.hieule.arx_automation.app.front_end.input.dataset.CsvDatasetReader
+import info.hieule.arx_automation.app.front_end.input.hierarchies.CsvHierachyReader
 import org.apache.commons.cli.*
-import org.deidentifier.arx.Data
 import org.litote.kmongo.KMongo
 
 fun buildOptions(): Options {
@@ -15,12 +12,21 @@ fun buildOptions(): Options {
     val subCommandOptionGroup: OptionGroup = OptionGroup()
     subCommandOptionGroup.isRequired = true
     subCommandOptionGroup.addOption(Option.builder(null).longOpt("parse-dataset").desc("Parse the dataset").build())
+    subCommandOptionGroup.addOption(Option.builder(null).longOpt("parse-hierarchy").desc("Parse the hierarchy file").build())
     options.addOptionGroup(subCommandOptionGroup)
 
     options.addOption(
         Option.builder("d")
             .longOpt("dataset")
             .desc("The name of the dataset")
+            .hasArg(true)
+            .build()
+    )
+
+    options.addOption(
+        Option.builder("h")
+            .longOpt("hierarchy")
+            .desc("The list of hierarchy attribute names")
             .hasArg(true)
             .build()
     )
@@ -44,6 +50,23 @@ fun main(args: Array<String>) {
             datasetWriter.write(dataset)
 
             println("Dataset is created with id [${dataset.id}]")
+        }
+
+        cmd.hasOption("parse-hierarchy") -> {
+            val hierarchyString = cmd.getOptionValue('h')
+            val hierarchyAttributes = hierarchyString.split(',')
+            val datasetWriter = MongoDbDatasetWriter(anonymizationDb, "hierarchies")
+
+            for (attribute in hierarchyAttributes) {
+                val dataset = CsvHierachyReader(
+                    cmd.getOptionValue('d'),
+                    attribute
+                ).read()
+
+                datasetWriter.write(dataset)
+
+                println("Dataset is created with id [${dataset.id}] for attribute [${attribute}]")
+            }
         }
     }
 }
