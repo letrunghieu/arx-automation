@@ -18,6 +18,7 @@ dependencies {
     implementation(group = "com.rabbitmq", name = "amqp-client", version = "5.9.0")
     implementation(group = "commons-cli", name = "commons-cli", version = "1.4")
     implementation(group = "org.litote.kmongo", name = "kmongo", version = "4.1.0")
+    implementation(group = "org.litote.kmongo", name = "kmongo-id", version = "4.1.0")
     implementation(kotlin("stdlib-jdk8"))
 }
 
