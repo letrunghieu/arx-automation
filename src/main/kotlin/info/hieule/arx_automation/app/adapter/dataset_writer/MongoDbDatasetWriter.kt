@@ -1,7 +1,7 @@
-package info.hieule.arx_automation.app.adapter.dataset
+package info.hieule.arx_automation.app.adapter.dataset_writer
 
 import com.mongodb.client.MongoDatabase
-import info.hieule.arx_automation.ports.dataset.DatasetWriter
+import info.hieule.arx_automation.ports.DatasetWriter
 import info.hieule.arx_automation.shared.models.Dataset
 import org.litote.kmongo.getCollection
 

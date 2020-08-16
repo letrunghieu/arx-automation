@@ -34,7 +34,7 @@ tasks.create<JavaExec>("demoConsumer") {
 }
 
 tasks.create<JavaExec>("frontEnd") {
-    main = "info.hieule.arx_automation.app.front_end.ApplicationKt"
+    main = "info.hieule.arx_automation.app.ApplicationKt"
     classpath = sourceSets["main"].runtimeClasspath
 }
 

@@ -1,24 +1,20 @@
-package info.hieule.arx_automation.app.front_end.input.hierarchies
+package info.hieule.arx_automation.app.adapter.dataset_reader
 
+import info.hieule.arx_automation.ports.DatasetReader
 import info.hieule.arx_automation.shared.models.Dataset
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
 
-class CsvHierachyReader(
-    private val datasetName: String,
-    private val attributeName: String,
-    private val separator: Char = ';'
-): HierachyReader {
+class CsvDatasetReader(private val filePath: Path, private val separator: Char = ';') : DatasetReader {
     override fun read(): Dataset {
-        val path = Paths.get("hierarchies", "${this.datasetName}_int_hierarchy_${this.attributeName}.csv")
-
-        val reader = Files.newBufferedReader(path)
+        val reader = Files.newBufferedReader(filePath)
         val csvParser = CSVParser(reader, CSVFormat.newFormat(';'))
 
         val dataRows: ArrayList<Array<String>> = arrayListOf()
-        for(csvRecord in csvParser) {
+        for (csvRecord in csvParser) {
             dataRows.add(csvRecord.toList().toTypedArray())
         }
 
