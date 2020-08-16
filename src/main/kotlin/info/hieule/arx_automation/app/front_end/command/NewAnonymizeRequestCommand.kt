@@ -1,6 +1,6 @@
 package info.hieule.arx_automation.app.front_end.command
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.mongodb.client.MongoDatabase
 import com.rabbitmq.client.ConnectionFactory
 import info.hieule.arx_automation.app.adapter.anonymization_request_writer.MongoDbAnonymizationRequestWriter
@@ -11,6 +11,7 @@ import info.hieule.arx_automation.shared.models.AnonymizationRequest
 import info.hieule.arx_automation.shared.models.Dataset
 import info.hieule.arx_automation.shared.models.HierarchyAttributeInfo
 import org.apache.commons.cli.CommandLine
+import org.litote.kmongo.id.jackson.IdJacksonModule
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -81,7 +82,8 @@ class NewAnonymizeRequestCommand(private val mongoDatabase: MongoDatabase) : Com
         val mongoDbWriter = MongoDbAnonymizationRequestWriter(this.mongoDatabase)
         mongoDbWriter.write(request)
 
-        val objectMapper = ObjectMapper()
+        val objectMapper = jacksonObjectMapper()
+            .registerModule(IdJacksonModule())
 
         val connectionFactory = ConnectionFactory()
         connectionFactory.host = "localhost"

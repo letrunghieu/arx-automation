@@ -8,6 +8,10 @@ plugins {
 group = "info.hieule"
 version = "1.0-SNAPSHOT"
 
+application {
+    mainClass.set("info.hieule.arx_automation.app.AnonymizationEngineKt")
+}
+
 repositories {
     mavenCentral()
 }
@@ -23,17 +27,49 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
 }
 
-tasks.create<JavaExec>("demoPublisher") {
+//tasks {
+//    named<JavaExec>("demoPublisher") {
+//        main = "info.hieule.arx_automation.app.DemoPublisherKt"
+//        classpath = sourceSets["main"].runtimeClasspath
+//    }
+//
+//    named<JavaExec>("demoConsumer") {
+//        main = "info.hieule.arx_automation.app.DemoConsumerKt"
+//        classpath = sourceSets["main"].runtimeClasspath
+//    }
+//
+//    named<JavaExec>("frontEnd") {
+//        main = "info.hieule.arx_automation.app.ApplicationKt"
+//        classpath = sourceSets["main"].runtimeClasspath
+//    }
+//}
+
+//tasks.create<JavaExec>("demoPublisher") {
+//    main = "info.hieule.arx_automation.app.DemoPublisherKt"
+//    classpath = sourceSets["main"].runtimeClasspath
+//}
+
+//tasks.create<JavaExec>("demoConsumer") {
+//    main = "info.hieule.arx_automation.app.DemoConsumerKt"
+//    classpath = sourceSets["main"].runtimeClasspath
+//}
+
+//tasks.create<JavaExec>("frontEnd") {
+//    main = "info.hieule.arx_automation.app.ApplicationKt"
+//    classpath = sourceSets["main"].runtimeClasspath
+//}
+
+tasks.register<JavaExec>("demoPublisher") {
     main = "info.hieule.arx_automation.app.DemoPublisherKt"
     classpath = sourceSets["main"].runtimeClasspath
 }
 
-tasks.create<JavaExec>("demoConsumer") {
+tasks.register<JavaExec>("demoConsumer") {
     main = "info.hieule.arx_automation.app.DemoConsumerKt"
     classpath = sourceSets["main"].runtimeClasspath
 }
 
-tasks.create<JavaExec>("frontEnd") {
+tasks.register<JavaExec>("frontEnd") {
     main = "info.hieule.arx_automation.app.ApplicationKt"
     classpath = sourceSets["main"].runtimeClasspath
 }
