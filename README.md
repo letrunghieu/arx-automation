@@ -9,7 +9,8 @@ git submodules init
 git submodules update --remote
 ```
 
-... WIP ...
+Các dữ liệu mẫu nằm trong thư mục `data`.
+Các cây phân cấp tương ứng của các thuộc tính trong dữ liệu mẫu nằm trong thư mục `hierarchies`.
 
 ## Chạy CKAN local
 
@@ -23,3 +24,17 @@ docker-compose up
 ```
 
 Chờ đến khi chạy xong hết thấy dòng: `Running server 0.0.0.0 on port 5000" thì truy cập CKAN tại `http://localhost:5000`
+
+Tạo một yêu cầu ẩn danh hoá bằng command line (tập adults, 2 QI là age và education)
+
+```
+./gradlew frontEnd --args="--new -d adult -q age,education"
+```
+
+Chạy công cụ ẩn danh hoá cho yêu cầu vừa tạo
+
+```
+./gradlew run
+```
+
+Các tập dữ liệu được lưu trong database `anonymization` của MongoDB. Truy cập giao diện quản lý của MongoDB tại `http://localhost:8081`, các tập dữ liệu được định danh thông qua `_id`.
