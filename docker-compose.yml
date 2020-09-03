@@ -87,7 +87,6 @@ services:
 
   mongo:
     image: mongo:4.4
-    restart: always
     ports:
       - 27017:27017
     environment:
@@ -98,7 +97,6 @@ services:
 
   mongo-express:
     image: mongo-express
-    restart: always
     ports:
       - 8081:8081
     environment:
