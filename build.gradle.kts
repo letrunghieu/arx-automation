@@ -1,15 +1,22 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    application
+//    application
+    id("org.springframework.boot") version "2.3.3.RELEASE"
+    id("io.spring.dependency-management") version "1.0.10.RELEASE"
     kotlin("jvm") version "1.3.72"
+    kotlin("plugin.spring") version "1.3.72"
 }
 
 group = "info.hieule"
 version = "1.0-SNAPSHOT"
 
-application {
-    mainClass.set("info.hieule.arx_automation.app.AnonymizationEngineKt")
+//application {
+//    mainClass.set("info.hieule.arx_automation.app.AnonymizationEngineKt")
+//}
+
+springBoot {
+    mainClassName = "info.hieule.arx_automation.app.springboot.ApplicationKt"
 }
 
 repositories {
@@ -24,40 +31,9 @@ dependencies {
     implementation(group = "org.litote.kmongo", name = "kmongo", version = "4.1.0")
     implementation(group = "org.litote.kmongo", name = "kmongo-id", version = "4.1.0")
     implementation(group = "org.apache.commons", name = "commons-csv", version = "1.8")
+    implementation(group = "org.springframework.boot", name = "spring-boot-starter-amqp", version = "2.3.3.RELEASE")
     implementation(kotlin("stdlib-jdk8"))
 }
-
-//tasks {
-//    named<JavaExec>("demoPublisher") {
-//        main = "info.hieule.arx_automation.app.DemoPublisherKt"
-//        classpath = sourceSets["main"].runtimeClasspath
-//    }
-//
-//    named<JavaExec>("demoConsumer") {
-//        main = "info.hieule.arx_automation.app.DemoConsumerKt"
-//        classpath = sourceSets["main"].runtimeClasspath
-//    }
-//
-//    named<JavaExec>("frontEnd") {
-//        main = "info.hieule.arx_automation.app.ApplicationKt"
-//        classpath = sourceSets["main"].runtimeClasspath
-//    }
-//}
-
-//tasks.create<JavaExec>("demoPublisher") {
-//    main = "info.hieule.arx_automation.app.DemoPublisherKt"
-//    classpath = sourceSets["main"].runtimeClasspath
-//}
-
-//tasks.create<JavaExec>("demoConsumer") {
-//    main = "info.hieule.arx_automation.app.DemoConsumerKt"
-//    classpath = sourceSets["main"].runtimeClasspath
-//}
-
-//tasks.create<JavaExec>("frontEnd") {
-//    main = "info.hieule.arx_automation.app.ApplicationKt"
-//    classpath = sourceSets["main"].runtimeClasspath
-//}
 
 tasks.register<JavaExec>("demoPublisher") {
     main = "info.hieule.arx_automation.app.DemoPublisherKt"
