@@ -2,9 +2,17 @@ spring:
   profiles:
     active: worker
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    ssl:
+      enabled: false
+
 logging:
   level:
-    org: DEBUG
+    org: INFO
 
 tutorial:
   client:
@@ -12,4 +20,4 @@ tutorial:
 
 app:
   rabbitmq:
-    exchangeName: anonymization.fanout
+    exchangeName: anonymization
