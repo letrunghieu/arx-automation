@@ -1,9 +1,9 @@
 import React,{useState} from 'react';
 import './App.css';
-import AaaS from './components/ARXaaS';
+import Anonymise from './components/ARXaaS';
 
 function App() {
-  const [endpoint, setEndpoint] = useState('http://192.168.1.1:8080')
+  const [endpoint, setEndpoint] = useState('http://localhost:5000')
 
   const endpointHandler = (e) => {
     if(e.target.value !== endpoint){
@@ -41,7 +41,7 @@ function App() {
         <div className="row">
           <div className="col-lg-12 text-center">
             <h1 className="mt-5">BK Anonymous</h1>
-            <AaaS endpoint = {endpoint}/>
+            <Anonymise endpoint = {endpoint}/>
           </div>
         </div>
       </div>
