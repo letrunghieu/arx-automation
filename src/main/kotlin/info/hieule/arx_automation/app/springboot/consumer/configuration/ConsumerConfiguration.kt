@@ -1,7 +1,6 @@
 package info.hieule.arx_automation.app.springboot.consumer.configuration
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import info.hieule.arx_automation.app.springboot.consumer.AnonymizationReceiver
 import org.springframework.amqp.core.*
 import org.springframework.amqp.rabbit.connection.ConnectionFactory
 import org.springframework.amqp.rabbit.core.RabbitTemplate

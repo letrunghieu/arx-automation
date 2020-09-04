@@ -16,8 +16,14 @@ logging:
 
 tutorial:
   client:
-    duration: 10000
+    duration: 100000
 
 app:
   rabbitmq:
     exchangeName: anonymization
+
+  mongodb:
+    hostname: localhost
+    username: root
+    password: secret
+    database: anonymization
