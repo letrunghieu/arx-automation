@@ -7,7 +7,7 @@ import org.springframework.context.ConfigurableApplicationContext
 
 class ApplicationCommandLineRunner() : CommandLineRunner {
     @Value("\${tutorial.client.duration:0}")
-    private var duration: Int? = null
+    private var duration: Long? = null
 
     @Autowired
     private lateinit var ctx: ConfigurableApplicationContext
@@ -19,7 +19,7 @@ class ApplicationCommandLineRunner() : CommandLineRunner {
         }
 
         println("Ready ... running for ${this.duration} ms")
-        Thread.sleep(this.duration!!.toLong())
+        Thread.sleep(this.duration!!)
         this.ctx.close()
         println("Exit!")
     }

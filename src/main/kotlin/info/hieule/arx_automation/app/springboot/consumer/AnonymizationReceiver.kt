@@ -18,13 +18,6 @@ class AnonymizationReceiver(
         private val anonymizationDatabase: MongoDatabase,
         private val defaultResultsConsumer: ResultsConsumer
 ) {
-
-//    @Autowired
-//    private lateinit var objectMapper: ObjectMapper
-//
-//    @Autowired
-//    private lateinit var anonymizationDatabase: MongoDatabase
-
     private val logger = LoggerFactory.getLogger(AnonymizationReceiver::class.java)
 
     @RabbitListener(queues = ["#{requestsQueue.name}"])
@@ -36,7 +29,7 @@ class AnonymizationReceiver(
 
         val dataProvider = AnonymizationRequestDataProvider(anonymizationRequest, this.anonymizationDatabase)
         val useCase = AnonymizingData(dataProvider, this.defaultResultsConsumer)
-        useCase.execute(0)
+        useCase.execute(anonymizationRequest)
 
         this.logger.info("Finish processing a request.")
     }
