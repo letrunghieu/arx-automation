@@ -123,7 +123,8 @@
       .then(res => res.json())
       .then(function (data) {
         //return setModel( JSON.stringify(data));
-        //setArxResp(data)
+        setArxResp(JSON.parse(JSON.stringify(data)));
+        //setArxResp(data);
       }) 
       .catch((error) => console.log(error));;
     };
