@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  ckan:
+    entrypoint: ["echo", "Service foo disabled"]
+
+  datapusher:
+    entrypoint: ["echo", "Service foo disabled"]
+
+  db:
+    entrypoint: ["echo", "Service foo disabled"]
+
+  solr:
+    entrypoint: ["echo", "Service foo disabled"]
+
+  redis:
+    entrypoint: ["echo", "Service foo disabled"]
+
+
