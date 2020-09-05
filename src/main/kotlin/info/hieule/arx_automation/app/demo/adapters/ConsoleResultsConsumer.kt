@@ -1,12 +1,13 @@
 package info.hieule.arx_automation.app.demo.adapters
 
 import info.hieule.arx_automation.ports.ResultsConsumer
+import info.hieule.arx_automation.shared.models.AnonymizationRequest
 import org.deidentifier.arx.ARXResult
 import org.deidentifier.arx.Data
 import java.text.DecimalFormat
 
 class ConsoleResultsConsumer : ResultsConsumer {
-    override fun consume(result: ARXResult, data: Data) {
+    override fun consume(result: ARXResult, data: Data, request: AnonymizationRequest) {
         val df1 = DecimalFormat("#####0.00")
         val sTotal = df1.format(result.time / 1000.toDouble()) + "s"
         println(" - Time needed: $sTotal")

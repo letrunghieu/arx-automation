@@ -35,7 +35,7 @@ fun main(args: Array<String>) {
                 val resultsConsumer = MongoDbResultsConsumer(anonymizationDb)
 
                 val useCase = AnonymizingData(dataProvider, resultsConsumer)
-                useCase.execute(0)
+                useCase.execute(anonymizationRequest)
             }, { _ -> })
         }
     }

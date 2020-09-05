@@ -2,6 +2,7 @@ package info.hieule.arx_automation.app
 
 import info.hieule.arx_automation.app.demo.adapters.ConsoleResultsConsumer
 import info.hieule.arx_automation.app.demo.adapters.DemoDataProvider01
+import info.hieule.arx_automation.shared.models.AnonymizationRequest
 import info.hieule.arx_automation.use_cases.AnonymizingData
 
 fun main(args: Array<String>) {
@@ -9,5 +10,5 @@ fun main(args: Array<String>) {
     val resultsConsumer = ConsoleResultsConsumer()
 
     val useCase = AnonymizingData(dataProvider, resultsConsumer)
-    useCase.execute(0)
+    useCase.execute(AnonymizationRequest(datasetId = ""))
 }

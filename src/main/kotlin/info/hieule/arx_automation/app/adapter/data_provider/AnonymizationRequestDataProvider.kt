@@ -40,13 +40,13 @@ class AnonymizationRequestDataProvider(
             data.definition.setAttributeType(attribute, AttributeType.IDENTIFYING_ATTRIBUTE)
         }
 
-//        val insensitiveAttributes = dataAttributes.toList()
-//            .minus(quasiIdentifierAttributes)
-//            .minus(sensitiveAttributes)
-//            .minus(identifierAttribute)
-//        for (attribute in insensitiveAttributes) {
-//            data.definition.setAttributeType(attribute, AttributeType.INSENSITIVE_ATTRIBUTE)
-//        }
+        val insensitiveAttributes = dataAttributes.toList()
+            .minus(quasiIdentifierAttributes)
+            .minus(sensitiveAttributes)
+            .minus(identifierAttribute)
+        for (attribute in insensitiveAttributes) {
+            data.definition.setAttributeType(attribute, AttributeType.INSENSITIVE_ATTRIBUTE)
+        }
 
         return data
     }
