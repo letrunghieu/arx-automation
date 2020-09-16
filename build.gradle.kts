@@ -32,6 +32,8 @@ dependencies {
     implementation(group = "org.litote.kmongo", name = "kmongo-id", version = "4.1.0")
     implementation(group = "org.apache.commons", name = "commons-csv", version = "1.8")
     implementation(group = "org.springframework.boot", name = "spring-boot-starter-amqp", version = "2.3.3.RELEASE")
+    implementation(group = "com.github.kittinunf.fuel", name = "fuel", version = "2.2.3")
+    implementation(group = "com.github.kittinunf.result", name = "result", version = "3.1.0")
     implementation(kotlin("stdlib-jdk8"))
 }
 

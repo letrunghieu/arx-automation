@@ -27,3 +27,10 @@ app:
     username: root
     password: secret
     database: anonymization
+
+  ckan:
+    hostname: "http://localhost:5000"
+    apiKey: "540218a3-8681-491e-9e74-285964c7cb46"
+    organization: "demo-organization"
+    defaultLicense: "odc-odbl"
+
