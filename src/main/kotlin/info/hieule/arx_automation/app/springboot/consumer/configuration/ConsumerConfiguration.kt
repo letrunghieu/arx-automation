@@ -48,7 +48,7 @@ class ConsumerConfiguration {
 
     @Bean
     public fun publicationResultsQueue(): Queue {
-        return QueueBuilder.durable(PUBLICATIONS_QUEUE_NAME)
+        return QueueBuilder.durable(PUBLICATION_RESULTS_QUEUE_NAME)
                 .build();
     }
 
@@ -74,7 +74,7 @@ class ConsumerConfiguration {
 
     @Bean
     public fun publicationResultsBinding(exchange: TopicExchange, publicationResultsQueue: Queue): Binding {
-        return BindingBuilder.bind(publicationResultsQueue).to(exchange).with(PUBLICATIONS_QUEUE_NAME);
+        return BindingBuilder.bind(publicationResultsQueue).to(exchange).with(PUBLICATION_RESULTS_QUEUE_NAME);
     }
 
     @Bean
