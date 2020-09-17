@@ -25,12 +25,12 @@ const App = props =>{
       </button>
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav">
-          
+
         </ul>
       <div className="form-inline my-2 my-lg-0">
       <input className="form-control mr-sm-2" type="text" placeholder="Name File Anonymization...here" aria-label="File-Endpoint" defaultValue={fileName} onChange={endpointHandler}></input>
       </div>
-        
+
       </div>
     </nav>
 
