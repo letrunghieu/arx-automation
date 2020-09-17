@@ -3,7 +3,7 @@ import './App.css';
 import Anonymise from './components/ARXaaS';
 
 function App() {
-  const [endpoint, setEndpoint] = useState('http://localhost:5000')
+  const [endpoint, setEndpoint] = useState('http://localhost:5010')
 
   const endpointHandler = (e) => {
     if(e.target.value !== endpoint){
@@ -11,8 +11,8 @@ function App() {
     }
   }
   return (
-    
-  
+
+
     <div className="App">
       <link
   rel="stylesheet"
@@ -27,12 +27,12 @@ function App() {
       </button>
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav">
-          
+
         </ul>
       <div className="form-inline my-2 my-lg-0">
       <input className="form-control mr-sm-2" type="text" placeholder="IP Server" aria-label="IP Server" defaultValue={endpoint} onChange={endpointHandler}></input>
       </div>
-        
+
       </div>
     </nav>
 

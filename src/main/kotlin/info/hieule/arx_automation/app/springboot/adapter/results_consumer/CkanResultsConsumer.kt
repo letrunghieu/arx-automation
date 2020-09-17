@@ -18,11 +18,13 @@ import org.deidentifier.arx.DataHandle
 import org.slf4j.LoggerFactory
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
 import java.io.File
 import java.io.FileWriter
 import java.util.*
 import kotlin.math.roundToInt
 
+@Component
 class CkanResultsConsumer(
         private val rabbitTemplate: RabbitTemplate,
         private val ckanConnectorConfiguration: CkanConnectorConfiguration
@@ -39,10 +41,10 @@ class CkanResultsConsumer(
         val datasetCsvFile = this.createTmpCsv(output)
         val datasetName = this.generatePackageName()
 
-        val informationLoss = ("${result.globalOptimum}".toDouble() * 1e8).roundToInt() * 1e-8
+        val informationLoss = ("${result.globalOptimum.highestScore}".toDouble() * 1e8).roundToInt() * 1e-8
 
         val publicationRequest = PublicationRequest(
-                title = "Title",
+                title = request.title,
                 description = "Information loss: ${informationLoss}",
                 requestId = request.id.toString(),
                 datasetId = request.datasetId
@@ -57,7 +59,9 @@ class CkanResultsConsumer(
                 "${this.ckanConnectorConfiguration.hostname}/dataset/${datasetName}"
         )
 
-        this.rabbitTemplate.convertAndSend(this.exchangeName, ConsumerConfiguration.PUBLICATIONS_QUEUE_NAME, publicationResult)
+        this.logger.info("A new dataset is published at [{}]", publicationResult.datasetUrl)
+
+        this.rabbitTemplate.convertAndSend(this.exchangeName, ConsumerConfiguration.RESULTS_QUEUE_NAME, publicationResult)
     }
 
     private fun createTmpCsv(dataHandle: DataHandle): File {

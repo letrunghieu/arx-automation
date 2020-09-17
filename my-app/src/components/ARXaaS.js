@@ -10,7 +10,7 @@ import requestAnony from '../dataExample/requestAnony.json';
 
 
 const Anonymise = props => {
- 
+
   var datarequestAnony  = JSON.stringify(requestAnony);
 
   const [model, setModel] = useState("");
@@ -29,7 +29,7 @@ const Anonymise = props => {
       delimiter: ";",
   	  skipEmptyLines: true,
       complete: function (results) {
-        if (results.data.length > 0) { 
+        if (results.data.length > 0) {
           let headers = results.data[0];
           setAttributes(headers.map(field => ({ field, attributeTypeModel })));
           setData(results.data)
@@ -112,18 +112,18 @@ const Anonymise = props => {
       crossDomain: true,
       method: 'post',
       body: JSON.stringify(payload),
-      
+
       headers: {
         "Content-Type": "application/json"
       }
     };
-  fetch('http://localhost:5000/api/'+service,requestOptions)
+  fetch('http://localhost:5010/api/'+service,requestOptions)
   .then(res => res.json())
   .then(function (data) {
   setModel( JSON.stringify(data));
    // setArxResp(JSON.parse(JSON.stringify(data)));
     //setArxResp(data);
-  }) 
+  })
   .catch((error) => console.log(error));;
 };
 
@@ -148,13 +148,13 @@ const requestsendJson = (payload, service) => {
       "Content-Type": "application/json"
     }
   };
-fetch('http://localhost:5000/api/'+service,requestOptions)
+fetch('http://localhost:5010/api/'+service,requestOptions)
 .then(res => res.json())
 .then(function (data) {
   setModel(JSON.stringify(data));
   //return setModel( JSON.stringify(data));
   //setArxResp(data)
-}) 
+})
 .catch((error) => console.log(error));;
 };
 
@@ -184,13 +184,13 @@ const requestOptions ={
     "Content-Type": "application/json"
   }
 };
-fetch('http://localhost:5000/api/'+service,requestOptions)
+fetch('http://localhost:5010/api/'+service,requestOptions)
 .then(res => res.json())
 .then(function (data) {
 return 1;
 //return setModel( JSON.stringify(data));
 //setArxResp(data)
-}) 
+})
 .catch((error) => console.log(error));;
 };
 
@@ -217,11 +217,11 @@ headers: {
   "Content-Type": "application/json"
 }
 };
-fetch('http://localhost:5000/api/'+service,requestOptions)
+fetch('http://localhost:5010/api/'+service,requestOptions)
 .then(res => res.json())
 .then(function (data) {
 setModel(JSON.stringify(data));
-}) 
+})
 .catch((error) => console.log(error));;
 };
 
@@ -267,14 +267,14 @@ setModel(JSON.stringify(data));
       <div className="card border-primary mb-3" style={{ maxWidth: '30rem' }}>
         <div className="card-header">Privacy model</div>
         <div className="card-body">
-          
+
 
           <PrivacyModelManager
           privacyModels={privacyModels}
           handlePrivacyAdd={handlePrivacyAdd}
           handlePrivacyRemove={handlePrivacyRemove}
         />
-  
+
         <RenderPrivacyModels
           privacyModels={privacyModels}
           handlePrivacyRemove={handlePrivacyRemove}
@@ -298,12 +298,12 @@ setModel(JSON.stringify(data));
       <button className="btn btn-primary" onClick={(e) => handleRequest(e, 'anonymize')}>
             Anonymize
             </button>
-          
+
               <button className="btn btn-primary" onClick={(e) => handlesendJson(e, 'sendJsonAnony')}>
             sendJsonAnony
               </button>
-              
-            
+
+
               <button className="btn btn-primary" onClick={(e) => handlesendResult(e, 'sendResultAnony')}>
             sendResult
               </button>
