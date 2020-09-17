@@ -113,13 +113,21 @@ function convertDatatoHieu(dataBody) {
 
     anonymizeModel['suppressionLimit'] = dataBody.suppressionLimit;
 
+    var datasetId = null;
+    var ckanUrl = null;
+    if (dataBody.data) {
+        var dataOrigin = new originalDatasets({data: dataBody.data});//data.data=lay field data trong databody
+        dataOrigin.save();
+        datasetId = dataOrigin._id;
+    } else if (dataBody.ckanUrl) {
+        ckanUrl = dataBody.ckanUrl
+    }
 
-    var dataOrigin = new originalDatasets({data: dataBody.data});//data.data=lay field data trong databody
-    dataOrigin.save();
 
     var requestData = new requests({
         title: dataBody.title,
-        datasetId: dataOrigin._id,
+        datasetId: datasetId,
+        ckanUrl: ckanUrl,
         hierarchies: hierarchy,
         sensitiveAttributes: sensitive,
         identifierAttributes: identifier,
@@ -130,7 +138,8 @@ function convertDatatoHieu(dataBody) {
 
     jsonModel['id'] = requestData._id;
     jsonModel['title'] = dataBody.title;
-    jsonModel['datasetId'] = dataOrigin._id;
+    jsonModel['datasetId'] = datasetId;
+    jsonModel['ckanUrl'] = ckanUrl;
     jsonModel['hierarchies'] = hierarchy;
     jsonModel['sensitiveAttributes'] = sensitive;
     jsonModel['identifierAttributes'] = identifier;
