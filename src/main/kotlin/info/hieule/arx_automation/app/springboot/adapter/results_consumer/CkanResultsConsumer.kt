@@ -26,8 +26,9 @@ import kotlin.math.roundToInt
 
 @Component
 class CkanResultsConsumer(
-        private val rabbitTemplate: RabbitTemplate,
-        private val ckanConnectorConfiguration: CkanConnectorConfiguration
+    private val objectMapper: ObjectMapper,
+    private val rabbitTemplate: RabbitTemplate,
+    private val ckanConnectorConfiguration: CkanConnectorConfiguration
 ) : ResultsConsumer {
     @Value("\${app.rabbitmq.exchangeName}")
     private lateinit var exchangeName: String;
@@ -44,10 +45,11 @@ class CkanResultsConsumer(
         val informationLoss = ("${result.globalOptimum.highestScore}".toDouble() * 1e8).roundToInt() * 1e-8
 
         val publicationRequest = PublicationRequest(
-                title = request.title,
-                description = "Information loss: ${informationLoss}",
-                requestId = request.id.toString(),
-                datasetId = request.datasetId
+            title = request.title,
+            description = "Information loss: ${informationLoss}\n\n" +
+                "Anonymization model: ${this.objectMapper.writeValueAsString(request.anonymizeModelConfigs)}\n",
+            requestId = request.id.toString(),
+            datasetId = request.datasetId
         )
 
         this.createPackage(datasetName, publicationRequest)
@@ -55,8 +57,8 @@ class CkanResultsConsumer(
         this.uploadResource(datasetName, datasetCsvFile)
 
         val publicationResult = PublicationResult(
-                request.id.toString(),
-                "${this.ckanConnectorConfiguration.hostname}/dataset/${datasetName}"
+            request.id.toString(),
+            "${this.ckanConnectorConfiguration.hostname}/dataset/${datasetName}"
         )
 
         this.logger.info("A new dataset is published at [{}]", publicationResult.datasetUrl)
@@ -84,17 +86,19 @@ class CkanResultsConsumer(
     }
 
     private fun createPackage(packageName: String, publicationRequest: PublicationRequest) {
+        val bodyMap: Map<String, String> = mapOf(
+            "name" to packageName,
+            "title" to publicationRequest.title,
+            "notes" to publicationRequest.description,
+            "license_id" to this.ckanConnectorConfiguration.defaultLicense,
+            "owner_org" to this.ckanConnectorConfiguration.organization
+        )
+
         val (request, response, result) = "${this.ckanConnectorConfiguration.hostname}/api/action/package_create"
-                .httpPost()
-                .header("Authorization", this.ckanConnectorConfiguration.apiKey)
-                .jsonBody("{\n" +
-                        "    \"name\": \"${packageName}\",\n" +
-                        "    \"title\": \"${publicationRequest.title}\",\n" +
-                        "    \"notes\": \"${publicationRequest.description}\",\n" +
-                        "    \"license_id\": \"${this.ckanConnectorConfiguration.defaultLicense}\",\n" +
-                        "    \"owner_org\": \"${this.ckanConnectorConfiguration.organization}\"\n" +
-                        "}")
-                .responseString()
+            .httpPost()
+            .header("Authorization", this.ckanConnectorConfiguration.apiKey)
+            .jsonBody(this.objectMapper.writeValueAsString(bodyMap))
+            .responseString()
 
         when (result) {
             is Result.Success -> {
@@ -109,13 +113,13 @@ class CkanResultsConsumer(
 
     private fun uploadResource(packageName: String, csvFile: File) {
         val (request, response, result) = "${this.ckanConnectorConfiguration.hostname}/api/action/resource_create"
-                .httpPost(parameters = listOf("package_id" to packageName))
-                .header("Authorization", this.ckanConnectorConfiguration.apiKey)
-                .upload()
-                .add(
-                        FileDataPart(csvFile, name = "upload")
-                )
-                .responseString()
+            .httpPost(parameters = listOf("package_id" to packageName))
+            .header("Authorization", this.ckanConnectorConfiguration.apiKey)
+            .upload()
+            .add(
+                FileDataPart(csvFile, name = "upload")
+            )
+            .responseString()
 
         when (result) {
             is Result.Success -> {

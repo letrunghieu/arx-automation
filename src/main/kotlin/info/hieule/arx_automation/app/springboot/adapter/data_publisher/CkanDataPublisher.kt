@@ -18,9 +18,9 @@ import java.io.FileWriter
 import java.util.*
 
 class CkanDataPublisher(
-        private val objectMapper: ObjectMapper,
-        private val datasetReader: DatasetReader,
-        private val ckanConnectorConfiguration: CkanConnectorConfiguration
+    private val objectMapper: ObjectMapper,
+    private val datasetReader: DatasetReader,
+    private val ckanConnectorConfiguration: CkanConnectorConfiguration
 ) : DataPublisher {
     private val logger = LoggerFactory.getLogger(CkanDataPublisher::class.java)
 
@@ -35,8 +35,8 @@ class CkanDataPublisher(
         this.uploadResource(datasetName, datasetCsvFile)
 
         return PublicationResult(
-                publicationRequest.requestId,
-                "${this.ckanConnectorConfiguration.hostname}/dataset/${datasetName}"
+            publicationRequest.requestId,
+            "${this.ckanConnectorConfiguration.hostname}/dataset/${datasetName}"
         )
     }
 
@@ -61,16 +61,16 @@ class CkanDataPublisher(
 
     private fun createPackage(packageName: String, publicationRequest: PublicationRequest) {
         val (request, response, result) = "${this.ckanConnectorConfiguration.hostname}/api/action/package_create"
-                .httpPost()
-                .header("Authorization", this.ckanConnectorConfiguration.apiKey)
-                .jsonBody("{\n" +
-                        "    \"name\": \"${packageName}\",\n" +
-                        "    \"title\": \"${publicationRequest.title}\",\n" +
-                        "    \"notes\": \"${publicationRequest.description}\",\n" +
-                        "    \"license_id\": \"${this.ckanConnectorConfiguration.defaultLicense}\",\n" +
-                        "    \"owner_org\": \"${this.ckanConnectorConfiguration.organization}\"\n" +
-                        "}")
-                .responseString()
+            .httpPost()
+            .header("Authorization", this.ckanConnectorConfiguration.apiKey)
+            .jsonBody("{\n" +
+                "    \"name\": \"${packageName}\",\n" +
+                "    \"title\": \"${publicationRequest.title}\",\n" +
+                "    \"notes\": \"${publicationRequest.description}\",\n" +
+                "    \"license_id\": \"${this.ckanConnectorConfiguration.defaultLicense}\",\n" +
+                "    \"owner_org\": \"${this.ckanConnectorConfiguration.organization}\"\n" +
+                "}")
+            .responseString()
 
         when (result) {
             is Result.Success -> {
@@ -85,13 +85,13 @@ class CkanDataPublisher(
 
     private fun uploadResource(packageName: String, csvFile: File) {
         val (request, response, result) = "${this.ckanConnectorConfiguration.hostname}/api/action/resource_create"
-                .httpPost(parameters = listOf("package_id" to packageName))
-                .header("Authorization", this.ckanConnectorConfiguration.apiKey)
-                .upload()
-                .add(
-                        FileDataPart(csvFile, name = "upload")
-                )
-                .responseString()
+            .httpPost(parameters = listOf("package_id" to packageName))
+            .header("Authorization", this.ckanConnectorConfiguration.apiKey)
+            .upload()
+            .add(
+                FileDataPart(csvFile, name = "upload")
+            )
+            .responseString()
 
         when (result) {
             is Result.Success -> {
