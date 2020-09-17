@@ -4,13 +4,14 @@ import org.bson.codecs.pojo.annotations.BsonId
 import org.litote.kmongo.Id
 
 data class AnonymizationRequest(
-        @BsonId val id: Id<AnonymizationRequest>? = null,
-        val title: String = "",
-        val datasetId: String,
-        val hierarchies: Array<HierarchyAttributeInfo> = arrayOf(),
-        val sensitiveAttributes: Array<String> = arrayOf(),
-        val identifierAttributes: Array<String> = arrayOf(),
-        val anonymizeModelConfigs: Map<String, Any> = mapOf()
+    @BsonId val id: Id<AnonymizationRequest>? = null,
+    val title: String = "",
+    val datasetId: String?,
+    val ckanUrl: String? = null,
+    val hierarchies: Array<HierarchyAttributeInfo> = arrayOf(),
+    val sensitiveAttributes: Array<String> = arrayOf(),
+    val identifierAttributes: Array<String> = arrayOf(),
+    val anonymizeModelConfigs: Map<String, Any> = mapOf()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

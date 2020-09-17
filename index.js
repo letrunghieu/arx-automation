@@ -105,6 +105,9 @@ function convertDatatoHieu(dataBody) {
     for (var i = 0; i < dataBody.privacyModels.length; i++) {
         if (dataBody.privacyModels[i].privacyModel === "KANONYMITY") {
             anonymizeModel['k'] = parseInt(dataBody.privacyModels[i].params.k);
+        } else if (dataBody.privacyModels[i].privacyModel === "LDIVERSITY_DISTINCT") {
+            anonymizeModel['l'] = parseInt(dataBody.privacyModels[i].params.l);
+            sensitive.unshift(dataBody.privacyModels[i].params.column_name)
         }
     }
 

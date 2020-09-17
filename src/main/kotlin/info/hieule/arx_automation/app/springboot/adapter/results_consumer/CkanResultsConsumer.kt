@@ -49,7 +49,7 @@ class CkanResultsConsumer(
             description = "Information loss: ${informationLoss}\n\n" +
                 "Anonymization model: ${this.objectMapper.writeValueAsString(request.anonymizeModelConfigs)}\n",
             requestId = request.id.toString(),
-            datasetId = request.datasetId
+            datasetId = request.datasetId ?: request.ckanUrl ?: ""
         )
 
         this.createPackage(datasetName, publicationRequest)
