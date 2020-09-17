@@ -176,6 +176,7 @@ function consumeFromQueue(chanelName, queueName) {
     chanelName.consume(queueName, function (msg) {
         console.log(" received 1 message");
         tempData = JSON.stringify(JSON.parse(msg.content.toString()));
+        console.log(tempData)
         return tempData;
     }, {
         noAck: true
