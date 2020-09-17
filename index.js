@@ -209,14 +209,14 @@ app.post('/api/sendResultAnony', function (req, res) {
  app.post('/api/anonymize', function (req, res) {
    var dataBody = req.body;
    var transData=convertDatatoHieu(dataBody);
-   publishToQueue (chanelRequest,queueRequest, data);
+   publishToQueue (chanelRequest,queueRequest,transData);
    res.json(transData);
 })
 
 app.post('/api/sendJsonAnony', function (req, res) {
    var dataBody = req.body;
    var transData=convertDatatoHieu(dataBody);
-   publishToQueue (chanelRequest,queueRequest, data);
+   publishToQueue (chanelRequest,queueRequest,transData);
    res.json(transData);
  })
  
@@ -225,7 +225,7 @@ app.post('/api/sendJsonAnony', function (req, res) {
 
 
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5010;
 app.listen(port);
 
 console.log('App is listening on port ' + port);

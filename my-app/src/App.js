@@ -1,27 +1,25 @@
-import React,{useState} from 'react';
-import './App.css';
-import Anonymise from './components/ARXaaS';
+import React, {useState} from 'react';
 
-function App() {
-  const [endpoint, setEndpoint] = useState('http://localhost:5000')
+
+import AaaS from './components/ARXaaS';
+import './bootstrap.css'
+
+const App = props =>{
+
+  const [fileName, setfileName] = useState('')
 
   const endpointHandler = (e) => {
-    if(e.target.value !== endpoint){
-      setEndpoint(e.target.value)
+    if(e.target.value !== fileName){
+      setfileName(e.target.value)
     }
   }
-  return (
     
-  
-    <div className="App">
-      <link
-  rel="stylesheet"
-  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-  crossOrigin="anonymous"
-/>;
-<nav className="navbar navbar-expand-lg navbar-dark bg-primary" >
-      <a className="navbar-brand" href="/">BK Anonymous</a>
+  let content = (
+    
+      <div className="App" >
+
+      <nav className="navbar navbar-expand-lg navbar-dark bg-primary" >
+      <a className="navbar-brand" href="/">BK Anonymization</a>
       <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
       </button>
@@ -30,7 +28,7 @@ function App() {
           
         </ul>
       <div className="form-inline my-2 my-lg-0">
-      <input className="form-control mr-sm-2" type="text" placeholder="IP Server" aria-label="IP Server" defaultValue={endpoint} onChange={endpointHandler}></input>
+      <input className="form-control mr-sm-2" type="text" placeholder="Name File Anonymization...here" aria-label="File-Endpoint" defaultValue={fileName} onChange={endpointHandler}></input>
       </div>
         
       </div>
@@ -40,13 +38,18 @@ function App() {
       <div >
         <div className="row">
           <div className="col-lg-12 text-center">
-            <h1 className="mt-5">BK Anonymous</h1>
-            <Anonymise endpoint = {endpoint}/>
+            <h1 className="mt-5">BK Anonymization</h1>
+            <AaaS fileName = {fileName}/>
           </div>
         </div>
       </div>
-    </div>
-  );
+
+
+      </div>
+  )
+
+  return content
 }
 
 export default App;
+

@@ -14,7 +14,7 @@ const Anonymise = props => {
   var datarequestAnony  = JSON.stringify(requestAnony);
 
   const [model, setModel] = useState("");
-  const { endpoint } = props;
+  const { fileName } = props;
   const [currentData, setData] = useState("");
   const [attributes, setAttributes] = useState([]);
   const [privacyModels, setPrivacyModels] = useState([]);
@@ -102,7 +102,8 @@ const Anonymise = props => {
     jsonModel['attributes'] = attributes;
     jsonModel['privacyModels'] = privacyModels;
     jsonModel["suppressionLimit"] = suppressionLimit;
-    jsonModel["title"]="tap du lieu demo";
+    //jsonModel["title"]="tap du lieu demo";
+    jsonModel["title"]=fileName;
     return jsonModel
   };
 
@@ -117,7 +118,7 @@ const Anonymise = props => {
         "Content-Type": "application/json"
       }
     };
-  fetch('http://localhost:5000/api/'+service,requestOptions)
+  fetch('http://localhost:5010/api/'+service,requestOptions)
   .then(res => res.json())
   .then(function (data) {
   setModel( JSON.stringify(data));
@@ -148,7 +149,7 @@ const requestsendJson = (payload, service) => {
       "Content-Type": "application/json"
     }
   };
-fetch('http://localhost:5000/api/'+service,requestOptions)
+fetch('http://localhost:5010/api/'+service,requestOptions)
 .then(res => res.json())
 .then(function (data) {
   setModel(JSON.stringify(data));
@@ -184,7 +185,7 @@ const requestOptions ={
     "Content-Type": "application/json"
   }
 };
-fetch('http://localhost:5000/api/'+service,requestOptions)
+fetch('http://localhost:5010/api/'+service,requestOptions)
 .then(res => res.json())
 .then(function (data) {
 return 1;
@@ -217,7 +218,7 @@ headers: {
   "Content-Type": "application/json"
 }
 };
-fetch('http://localhost:5000/api/'+service,requestOptions)
+fetch('http://localhost:5010/api/'+service,requestOptions)
 .then(res => res.json())
 .then(function (data) {
 setModel(JSON.stringify(data));
@@ -228,6 +229,25 @@ setModel(JSON.stringify(data));
 
   let content = (
     <div align="center">
+
+         {/* <div></div>
+         <div className="row">
+            <div className="col-sm-2">
+            <label>
+                    <span>Option A</span>
+                    <input type="radio" name="myRadioInput" value="Option A"/>
+                </label>
+            </div>
+            <div className="col-sm">
+            <label>
+                    <span>Option B</span>
+                    <input type="radio" name="myRadioInput" value="Option B"/>
+                </label>
+          
+            </div>
+          </div>
+                 */}
+                
 
       <div className="card border-primary mb-3" align="center" style={{ maxWidth: '40rem' }}>
         <div className="card-header">Upload</div>
