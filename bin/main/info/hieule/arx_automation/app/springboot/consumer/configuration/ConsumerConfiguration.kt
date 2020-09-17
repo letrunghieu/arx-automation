@@ -19,6 +19,7 @@ class ConsumerConfiguration {
         const val REQUESTS_QUEUE_NAME = "requests"
         const val RESULTS_QUEUE_NAME = "results"
         const val PUBLICATIONS_QUEUE_NAME = "publications"
+        const val PUBLICATION_RESULTS_QUEUE_NAME = "publication_results"
     }
 
     @Value("\${app.rabbitmq.exchangeName}")
@@ -46,6 +47,12 @@ class ConsumerConfiguration {
     }
 
     @Bean
+    public fun publicationResultsQueue(): Queue {
+        return QueueBuilder.durable(PUBLICATION_RESULTS_QUEUE_NAME)
+                .build();
+    }
+
+    @Bean
     public fun exchange(): TopicExchange {
         return TopicExchange(this.exchangeName);
     }
@@ -63,6 +70,11 @@ class ConsumerConfiguration {
     @Bean
     public fun publicationsBinding(exchange: TopicExchange, publicationsQueue: Queue): Binding {
         return BindingBuilder.bind(publicationsQueue).to(exchange).with(PUBLICATIONS_QUEUE_NAME);
+    }
+
+    @Bean
+    public fun publicationResultsBinding(exchange: TopicExchange, publicationResultsQueue: Queue): Binding {
+        return BindingBuilder.bind(publicationResultsQueue).to(exchange).with(PUBLICATION_RESULTS_QUEUE_NAME);
     }
 
     @Bean

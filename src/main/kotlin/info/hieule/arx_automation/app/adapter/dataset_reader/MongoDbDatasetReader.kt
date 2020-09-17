@@ -8,15 +8,20 @@ import org.litote.kmongo.getCollection
 import org.litote.kmongo.id.WrappedObjectId
 
 class MongoDbDatasetReader(
-    private val database: MongoDatabase,
-    private val collectionName: String,
-    private val datasetId: String
+        private val database: MongoDatabase,
+        private val collectionName: String,
+        private val datasetId: String
 ) : DatasetReader {
 
     override fun read(): Dataset {
         val collection = this.database.getCollection<Dataset>(this.collectionName)
 
-        return collection.findOneById(WrappedObjectId<Dataset>(datasetId))
-            ?: throw RuntimeException("Cannot find dataset with id [$datasetId] in Mongo collection [$collectionName]");
+        val dataset = collection.findOneById(WrappedObjectId<Dataset>(datasetId));
+
+        if (dataset == null) {
+            throw RuntimeException("Cannot find dataset with id [$datasetId] in Mongo collection [$collectionName]");
+        }
+
+        return dataset
     }
 }
