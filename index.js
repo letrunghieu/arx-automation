@@ -66,6 +66,12 @@ var myDB=mongoose.connect(urlMongo,optionMongo,function (err) {
 
  var hierarchies= mongoose.model('hierarchies', hierarchiesConstruction  );
  var originalDatasets= mongoose.model("originalDatasets",originalDatasetsConstruction );
+ ////////////////////////////
+
+
+// Ko viet hoa dc "originalDatasets"
+
+ //////////////////////////////////////
  var requests= mongoose.model('requests',requestsConstruction);
  
  function convertDatatoHieu(dataBody)
@@ -103,7 +109,6 @@ var myDB=mongoose.connect(urlMongo,optionMongo,function (err) {
     }
     
    for(var i = 0; i < dataBody.privacyModels.length; i++){
-         // nếu là sinh viên cần edit thì thực hiện edit
       if(dataBody.privacyModels[i].privacyModel==="KANONYMITY")
       {
          anonymizeModel['k']=parseInt(dataBody.privacyModels[i].params.k);
@@ -157,7 +162,6 @@ var myDB=mongoose.connect(urlMongo,optionMongo,function (err) {
             durable: false
          });
       chanelRequest= channel;
-       //consumeFromQueue(queueName);
     });
 
    conn.createChannel(function (err, channel) {
@@ -168,7 +172,11 @@ var myDB=mongoose.connect(urlMongo,optionMongo,function (err) {
       consumeFromQueue(chanelResult,queueResult);
     });
   });
- 
+ //////////////////////////////////////bin
+
+// Su dung exchange.pulish()  bi loi
+
+ //////////////////////////////////////////////
 function publishToQueue (chanelName,queueName, data) {
    console.log(" send 1 message");
    return chanelName.sendToQueue(queueName, Buffer.from(JSON.stringify(data)));
