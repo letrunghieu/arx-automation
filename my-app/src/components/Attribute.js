@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 const Attribute = props => {
 
-    const [currentSelected, setSelect] = useState('QUASIIDENTIFYING');
+    const [currentSelected, setSelect] = useState("INSENSITIVE");
     const { name, index } = props;
 
     let content = (
@@ -18,8 +18,10 @@ const Attribute = props => {
                         }
                         }
                     >
-                        <option defaultValue value={currentSelected}>Quasi-identifying</option>
-                        <option value="INSENSITIVE">Insensitive</option>
+                       {/*  <option defaultValue value={currentSelected}>Quasi-identifying</option> */}
+                        {/* <option value="INSENSITIVE">Insensitive</option> */}
+                        <option defaultValue value="INSENSITIVE">Insensitive</option>
+                        <option value='QUASIIDENTIFYING'>Quasi-identifying</option>
                         <option value="SENSITIVE">Sensitive</option>
                         <option value="IDENTIFYING">Identifying</option>
                     </select>

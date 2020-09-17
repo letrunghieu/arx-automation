@@ -1,0 +1,18 @@
+{
+    "id": "5f53119d096b15099b9c6a33",
+    "datasetId": "5f531198096b15099b9c6a30",
+    "hierarchies": [{
+            "attribute": "age",
+            "datasetId": "5f53119d096b15099b9c6a31"
+        },
+        {
+            "attribute": "education",
+            "datasetId": "5f53119d096b15099b9c6a32"
+        }
+    ],
+    "sensitiveAttributes": [],
+    "identifierAttributes": [],
+    "anonymizeModelConfigs": {
+        "k": 5
+    }
+}

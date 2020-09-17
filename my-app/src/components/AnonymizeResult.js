@@ -28,9 +28,9 @@ const anonymizeResult = props => {
                 </Row>
             </Container>
             <h2>Anonymization Metrics</h2>
-            <p>Process Time: <b>{arxResp.anonymizeResult.metrics.processTimeMillisecounds} ms</b></p>
+            {/* <p>Process Time: <b>{arxResp.anonymizeResult.metrics.processTimeMillisecounds} ms</b></p> */}
             <MetricsAttributeGeneraliztion attributeGeneralization={arxResp.anonymizeResult.metrics.attributeGeneralization} />
-            <PrivacyModels privacyModels={arxResp.anonymizeResult.metrics.privacyModels} />
+            {/* <PrivacyModels privacyModels={arxResp.anonymizeResult.metrics.privacyModels} /> */}
         </div>
     );
 

@@ -16,4 +16,12 @@ services:
   redis:
     entrypoint: ["echo", "Service foo disabled"]
 
+  # broker:
+  #   entrypoint: ["echo", "Service foo disabled"]
+  # mongo:
+  #   entrypoint: ["echo", "Service foo disabled"]
+  # mongo-express:
+  #   entrypoint: ["echo", "Service foo disabled"]
+    
+  
 

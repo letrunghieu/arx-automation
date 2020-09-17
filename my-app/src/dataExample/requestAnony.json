@@ -50,5 +50,6 @@
             "l": "2"
         }
     }],
-    "suppressionLimit": 0.02
+    "suppressionLimit": 0.02,
+    "title": "Tập dữ liệu demo"
 }

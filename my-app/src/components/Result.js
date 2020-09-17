@@ -2,6 +2,7 @@ import React from 'react'
 
 import 'bootstrap/dist/css/bootstrap.css';
 
+
 import AnonymizeResult from './AnonymizeResult'
 import AnalyzeResult from './AnalyzeResult';
 const Result = props => {

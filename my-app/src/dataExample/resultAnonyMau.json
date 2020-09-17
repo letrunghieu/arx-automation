@@ -1,0 +1,71 @@
+{
+    "id": "5f530af318010c4f25464236",
+    "requestId": "5f530af2a177d94771db1b4f",
+    "optimalSolutionDatasetId": "5f530af318010c4f25464235",
+    "maxGeneralizations": [{
+            "attributeName": "education",
+            "generalizationLevel": 3
+        },
+        {
+            "attributeName": "age",
+            "generalizationLevel": 4
+        }
+    ],
+    "solutionCandidates": [{
+            "generalizations": [{
+                    "attributeName": "age",
+                    "generalizationLevel": 0
+                },
+                {
+                    "attributeName": "education",
+                    "generalizationLevel": 0
+                }
+            ],
+            "isAnonymized": true,
+            "isOptimal": true,
+            "informationLost": 5.526E-5
+        },
+        {
+            "generalizations": [{
+                    "attributeName": "age",
+                    "generalizationLevel": 1
+                },
+                {
+                    "attributeName": "education",
+                    "generalizationLevel": 0
+                }
+            ],
+            "isAnonymized": true,
+            "isOptimal": false,
+            "informationLost": 0.02000198
+        },
+        {
+            "generalizations": [{
+                    "attributeName": "age",
+                    "generalizationLevel": 3
+                },
+                {
+                    "attributeName": "education",
+                    "generalizationLevel": 0
+                }
+            ],
+            "isAnonymized": true,
+            "isOptimal": false,
+            "informationLost": 0.09175052
+        },
+        {
+            "generalizations": [{
+                    "attributeName": "age",
+                    "generalizationLevel": 4
+                },
+                {
+                    "attributeName": "education",
+                    "generalizationLevel": 3
+                }
+            ],
+            "isAnonymized": true,
+            "isOptimal": false,
+            "informationLost": 1.0
+        }
+    ]
+}
