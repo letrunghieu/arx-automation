@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class CkanDatasetWriter(
-        private val ckanConnectorConfiguration: CkanConnectorConfiguration
+    private val ckanConnectorConfiguration: CkanConnectorConfiguration
 ) : DatasetWriter {
     override fun write(dataset: Dataset): Dataset {
         TODO("Not yet implemented")

@@ -6,8 +6,8 @@ const Attribute = props => {
     const { name, index } = props;
 
     let content = (
-        <tbody>
-            <tr>
+        <tbody >
+            <tr >
                 <td>{name}</td>
                 <td>
                     <select 

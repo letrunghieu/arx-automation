@@ -1,23 +1,31 @@
 import React, {useState} from 'react';
 
-
+import { NavLink } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link ,Switch} from "react-router-dom";
 import AaaS from './components/ARXaaS';
-import './bootstrap.css'
+import './bootstrap.css';
+import SimpleUSER from './components/Simple';
 
 const App = props =>{
+  
 
-  const [fileName, setfileName] = useState('')
+  const [fileName, setfileName] = useState('Anonymized')
+ 
 
   const endpointHandler = (e) => {
     if(e.target.value !== fileName){
       setfileName(e.target.value)
     }
   }
-    
+
+  let advance=(  <div >
+    <AaaS fileName = {fileName}/>   </div>);
+
+  let simple= (<div >   <SimpleUSER fileName = {fileName} />  </div>);
+  const [typeUser, settypeUser] = useState(simple);
   let content = (
     
       <div className="App" >
-
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary" >
       <a className="navbar-brand" href="/">BK Anonymization</a>
       <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,18 +42,30 @@ const App = props =>{
       </div>
     </nav>
 
+   
 
-      <div >
-        <div className="row">
-          <div className="col-lg-12 text-center">
-            <h1 className="mt-5">BK Anonymization</h1>
-            <AaaS fileName = {fileName}/>
-          </div>
-        </div>
+<select
+    className="form-control"
+    onChange={(e) => {
+        if (e.target.value==="Scient") settypeUser(advance);
+         else settypeUser(simple);
+
+    }
+    }
+>
+    <option defaultValue  value="simple">Fast Anonymization</option>
+    <option  value="Scient">Advance Anonymization</option>
+
+{/* <option  defaultValue value="Scient">Advance Anonymization</option>
+<option   value="simple">Fast Anonymization</option> */}
+    
+</select>
+
+      {typeUser}
+    
+
       </div>
-
-
-      </div>
+     
   )
 
   return content

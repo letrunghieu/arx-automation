@@ -5,7 +5,9 @@ import org.litote.kmongo.Id
 
 data class AnonymizationRequest(
     @BsonId val id: Id<AnonymizationRequest>? = null,
-    val datasetId: String,
+    val title: String = "",
+    val datasetId: String?,
+    val ckanUrl: String? = null,
     val hierarchies: Array<HierarchyAttributeInfo> = arrayOf(),
     val sensitiveAttributes: Array<String> = arrayOf(),
     val identifierAttributes: Array<String> = arrayOf(),

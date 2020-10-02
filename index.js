@@ -49,14 +49,16 @@ var outputDatasetsConstruction = new mongoose.Schema(
 
 var requestsConstruction = new mongoose.Schema(
     {
-        title: String,
+		title: String,
+		originalFileName:String,
         datasetId: String,
         hierarchies: Array,
         sensitiveAttributes: Array,
         identifierAttributes: Array,
         anonymizeModelConfigs: {
             suppressionLimit: Number,
-            k: Number
+            k: Number,
+            l:Number
         }
     }
 )
@@ -77,24 +79,55 @@ function convertDatatoHieu(dataBody) {
     var identifier = [];
     var anonymizeModel = {};
     var hierarchy = [];
-    //console.log(data);
-    for (var i = 0; i < dataBody.attributes.length; i++) {
-        ///////////////hierarchies
-        if (dataBody.attributes[i].hierarchy) //neu co cay phan cap
-        {
-            var dataHierarchies = new hierarchies({data: dataBody.attributes[i].hierarchy});
-
-            dataHierarchies.save();
-            var hierachyForrequest = {
-                attribute: dataBody.attributes[i].field, //ten filed cua hierachy hien tai
-                datasetId: dataHierarchies._id
+	//console.log(data);
+	for (var i = 0; i < dataBody.privacyModels.length; i++) {
+        if (dataBody.privacyModels[i].privacyModel === "KANONYMITY") {
+            anonymizeModel['k'] = parseInt(dataBody.privacyModels[i].params.k);
+        } else if (dataBody.privacyModels[i].privacyModel === "LDIVERSITY_DISTINCT") {
+            anonymizeModel['l'] = parseInt(dataBody.privacyModels[i].params.l);
+			sensitive.unshift(dataBody.privacyModels[i].params.column_name);
+			for (var j = 0; j < dataBody.attributes.length; j++) {
+				if (dataBody.attributes[j].field===dataBody.privacyModels[i].params.column_name)
+				{
+					dataBody.attributes[j].attributeTypeModel="SENSITIVE";
+				}
             }
-            hierarchy.push(hierachyForrequest);
         }
+	}
+	
+
+
+    for (var i = 0; i < dataBody.attributes.length; i++) {
+		///////////////hierarchies
+		if (dataBody.attributes[i].attributeTypeModel === "QUASIIDENTIFYING")
+		{
+        	if (dataBody.attributes[i].hierarchy) //neu co cay phan cap
+        	{
+            	var dataHierarchies = new hierarchies({data: dataBody.attributes[i].hierarchy});
+
+            	dataHierarchies.save();
+            	var hierachyForrequest = {
+                	attribute: dataBody.attributes[i].field, //ten filed cua hierachy hien tai
+                	datasetId: dataHierarchies._id
+            	}
+            	hierarchy.push(hierachyForrequest);
+			}
+			else 
+			{
+				var hierachyForrequest = {
+                	attribute: dataBody.attributes[i].field, //ten filed cua hierachy hien tai
+                	datasetId: null
+            	}
+            	hierarchy.push(hierachyForrequest);
+			}
+		}
 
         //////////////sensitive
         if (dataBody.attributes[i].attributeTypeModel === "SENSITIVE") {
+            if (sensitive.indexOf(dataBody.attributes[i].field) === -1)
+            {
             sensitive.push(dataBody.attributes[i].field);
+            }
         }
         ///////////////////// identifier
         if (dataBody.attributes[i].attributeTypeModel === "IDENTIFYING") {
@@ -102,14 +135,7 @@ function convertDatatoHieu(dataBody) {
         }
     }
 
-    for (var i = 0; i < dataBody.privacyModels.length; i++) {
-        if (dataBody.privacyModels[i].privacyModel === "KANONYMITY") {
-            anonymizeModel['k'] = parseInt(dataBody.privacyModels[i].params.k);
-        } else if (dataBody.privacyModels[i].privacyModel === "LDIVERSITY_DISTINCT") {
-            anonymizeModel['l'] = parseInt(dataBody.privacyModels[i].params.l);
-            sensitive.unshift(dataBody.privacyModels[i].params.column_name)
-        }
-    }
+    
 
     anonymizeModel['suppressionLimit'] = dataBody.suppressionLimit;
 
@@ -125,7 +151,8 @@ function convertDatatoHieu(dataBody) {
 
 
     var requestData = new requests({
-        title: dataBody.title,
+		title: dataBody.title,
+		originalFileName:dataBody.originalfileName,
         datasetId: datasetId,
         ckanUrl: ckanUrl,
         hierarchies: hierarchy,
@@ -143,9 +170,10 @@ function convertDatatoHieu(dataBody) {
     jsonModel['hierarchies'] = hierarchy;
     jsonModel['sensitiveAttributes'] = sensitive;
     jsonModel['identifierAttributes'] = identifier;
-    jsonModel['anonymizeModelConfigs'] = anonymizeModel;
+	jsonModel['anonymizeModelConfigs'] = anonymizeModel;
+	jsonModel["originalFileName"]=dataBody.originalfileName;
     console.log(jsonModel);
-    return jsonModel
+    return jsonModel;
 }
 
 

@@ -1,9 +1,11 @@
 package info.hieule.arx_automation.app.adapter.data_provider
 
 import com.mongodb.client.MongoDatabase
+import info.hieule.arx_automation.app.adapter.dataset_reader.CkanDatasetReader
 import info.hieule.arx_automation.app.adapter.dataset_reader.MongoDbDatasetReader
 import info.hieule.arx_automation.ports.DataProvider
 import info.hieule.arx_automation.shared.models.AnonymizationRequest
+import info.hieule.arx_automation.shared.models.Dataset
 import org.deidentifier.arx.AttributeType
 import org.deidentifier.arx.Data
 
@@ -17,7 +19,12 @@ class AnonymizationRequestDataProvider(
     }
 
     override fun getData(): Data {
-        val dataset = MongoDbDatasetReader(this.mongoDatabase, ORIGINAL_DATASET_COLLECTION, this.request.datasetId).read()
+
+        val dataset = if (this.request.datasetId != null)
+            this.getMongoDbDataset(this.request.datasetId)
+        else
+            this.getCkanDataset(this.request.ckanUrl ?: "")
+
         val data = Data.create(dataset.data)
 
         val dataAttributes = dataset.data.first()
@@ -49,5 +56,13 @@ class AnonymizationRequestDataProvider(
         }
 
         return data
+    }
+
+    private fun getMongoDbDataset(datasetId: String): Dataset {
+        return MongoDbDatasetReader(this.mongoDatabase, ORIGINAL_DATASET_COLLECTION, datasetId).read()
+    }
+
+    private fun getCkanDataset(datasetId: String): Dataset {
+        return CkanDatasetReader(datasetId).read()
     }
 }

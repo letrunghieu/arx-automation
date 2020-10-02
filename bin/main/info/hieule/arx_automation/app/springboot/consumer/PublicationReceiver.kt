@@ -16,10 +16,10 @@ import org.springframework.stereotype.Component
 
 @Component
 class PublicationReceiver(
-        private val objectMapper: ObjectMapper,
-        private val anonymizationDatabase: MongoDatabase,
-        private val rabbitTemplate: RabbitTemplate,
-        private val ckanConnectorConfiguration: CkanConnectorConfiguration
+    private val objectMapper: ObjectMapper,
+    private val anonymizationDatabase: MongoDatabase,
+    private val rabbitTemplate: RabbitTemplate,
+    private val ckanConnectorConfiguration: CkanConnectorConfiguration
 ) {
     @Value("\${app.rabbitmq.exchangeName}")
     private lateinit var exchangeName: String;
@@ -30,18 +30,18 @@ class PublicationReceiver(
     public fun receive(message: Message) {
         this.logger.info("Start processing a publication request!")
         val publicationRequest: PublicationRequest = this.objectMapper.readerFor(PublicationRequest::class.java)
-                .readValue(message.body)
+            .readValue(message.body)
 
         val datasetReader = MongoDbDatasetReader(
-                this.anonymizationDatabase,
-                "outputDatasets",
-                publicationRequest.datasetId
+            this.anonymizationDatabase,
+            "outputDatasets",
+            publicationRequest.datasetId
         )
 
         val publicationResult = CkanDataPublisher(
-                objectMapper,
-                datasetReader,
-                ckanConnectorConfiguration
+            objectMapper,
+            datasetReader,
+            ckanConnectorConfiguration
         ).publish(publicationRequest)
 
         this.logger.info("A new dataset is published at [{}]", publicationResult.datasetUrl)

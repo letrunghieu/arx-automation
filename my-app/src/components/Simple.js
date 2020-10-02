@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Attribute from './Attribute'
+import AttributeCheckBox from './AttributeCheckBox'
 import papaparse from 'papaparse';
 import PrivacyModelManager from './PrivacyModelManager';
 import RenderPrivacyModels from './RenderPrivacyModels'
@@ -8,7 +8,7 @@ import requestAnony from '../dataExample/requestAnony.json';
 import ClipLoader from "react-spinners/ClipLoader";
 
 
-const Anonymise = props => {
+const Simple = props => {
 
   var datarequestAnony  = JSON.stringify(requestAnony);
   const defaultUser={ 
@@ -16,19 +16,20 @@ const Anonymise = props => {
     params: {k: "5"}
 }
 
-  const[originalFileName,setoriginalFileName]=useState("");
+const[originalFileName,setoriginalFileName]=useState("");
   var temp=null;
   const [link,setLink]=useState("");
-  //const [dialogRes,setdialogRes]=useState(null);
+ // const [dialogRes,setdialogRes]=useState(null);
   //const [model, setModel] = useState("");
   const { fileName } = props;
+  const [resultUrl, setresultUrl] = useState("");
   const [currentData, setData] = useState("");
   const [attributes, setAttributes] = useState([]);
   const [privacyModels, setPrivacyModels] = useState([ defaultUser]);
-  const [suppressionLimit, setSuppressionLimit] = useState(null);
+  const [suppressionLimit, setSuppressionLimit] = useState(0.99);
   //const [arxResp, setArxResp] = useState('');
- // const [action, setAction] = useState('none');
-  const attributeTypeModel = 'INSENSITIVE';
+  //const [action, setAction] = useState('none');
+  const attributeTypeModel = 'QUASIIDENTIFYING';
   const [loadingAnony,setLoadingAnony]=useState(false);
   const [loadingResult,setLoadingResult]=useState(false);
 
@@ -41,7 +42,7 @@ const Anonymise = props => {
     loading={loadingAnony}
   />
 </div>);
-var renderWaitResult=(<div className="sweet-loading" >
+var renderWaitResult=(<div className="sweet-loading">
 <ClipLoader
   //css={override}
   size={25}
@@ -51,7 +52,7 @@ var renderWaitResult=(<div className="sweet-loading" >
 </div>);
 
   const onFilesChange = file => {
-    //console.log(typeof file);
+    //console.log(file.name);
     setoriginalFileName(file.name);
     papaparse.parse(file, {
       delimiter: ";",
@@ -96,27 +97,9 @@ var renderWaitResult=(<div className="sweet-loading" >
     setPrivacyModels(models);
   };
 
-  const handleSuppressionLimitAdd = (limit) => {
-    setSuppressionLimit(limit);
-  };
+ 
 
-  const handleSuppressionLimitRemove = () => {
-    setSuppressionLimit(null)
-  }
 
-  const handleHierarchyUpload = (file, field, index) => {
-    papaparse.parse(file, {
-      delimiter: ";",
-  	  skipEmptyLines: true,
-      complete: function (hierarchy) {
-        attributes[index] = {
-          ...attributes[index],
-          hierarchy: hierarchy.data
-        };
-        setAttributes(attributes)
-      }
-    });
-  };
 
   const handleRequest = (e, service) => {
     const payload = buildPayload();
@@ -192,69 +175,70 @@ fetch('http://localhost:5010/api/'+service,requestOptions)
 
 
 const handlesendResult= (e, service) => {
-  const payload = buildPayloadsendResult(service);
-  requestsendResult(payload, service);
-  //setAction(service);
-  };
-  
-  const buildPayloadsendResult = (service) => {
-  // if (service === 'sendResultAnalyze') return datasendResultAnalyze;
-  // else return datasendResultAnony;
-  let jsonModel={};
-  jsonModel['requestId']= "originalRequestId";
-  jsonModel['datasetUrl']= "http://ckan.localhost/dataset/abc-101010";
-  return jsonModel
-  
-  };
-  
-  const requestsendResult = (payload, service) => {
-  const requestOptions ={
-    crossDomain: true,
-    method: 'post',
-    body: JSON.stringify(payload),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  };
-  fetch('http://localhost:5010/api/'+service,requestOptions)
-  .then(res => res.json())
-  .then(function (data) {
-  return 1;
-  //return setModel( JSON.stringify(data));
-  //setArxResp(data)
-  })
-  .catch((error) => console.log(error));;
-  };
-  
-  
-  
-  
-  const  handlegetResult= (e,service) => {
-  setLoadingResult(true);
-  var jsonModel = {};
-    //jsonModel["suppressionLimit"] = suppressionLimit;
-  const requestOptions ={
+const payload = buildPayloadsendResult(service);
+requestsendResult(payload, service);
+//setAction(service);
+};
+
+const buildPayloadsendResult = (service) => {
+// if (service === 'sendResultAnalyze') return datasendResultAnalyze;
+// else return datasendResultAnony;
+let jsonModel={};
+jsonModel['requestId']= "originalRequestId";
+jsonModel['datasetUrl']= "http://ckan.localhost/dataset/abc-101010";
+return jsonModel
+
+};
+
+const requestsendResult = (payload, service) => {
+const requestOptions ={
   crossDomain: true,
   method: 'post',
-  body: JSON.stringify(jsonModel),
-  
+  body: JSON.stringify(payload),
   headers: {
     "Content-Type": "application/json"
   }
-  };
-  fetch('http://localhost:5010/api/'+service,requestOptions)
-  .then(res => res.json())
-  .then(function (data) {
-    setLoadingResult(false);
-    var objData=JSON.parse(JSON.stringify(data));
-    handlegetLink(objData.datasetUrl);
-        // console.log(objData.datasetUrl);
-    //     //console.log(JSON.stringify(data).);
-    //   //setrequestId(JSON.stringify(data).requestId);
-    //   setresultUrl(objData.datasetUrl);
-  })
-  .catch((error) => console.log(error));;
-  };
+};
+fetch('http://localhost:5010/api/'+service,requestOptions)
+.then(res => res.json())
+.then(function (data) {
+return 1;
+//return setModel( JSON.stringify(data));
+//setArxResp(data)
+})
+.catch((error) => console.log(error));;
+};
+
+
+
+
+const  handlegetResult= (e,service) => {
+setLoadingResult(true);
+var jsonModel = {};
+  //jsonModel["suppressionLimit"] = suppressionLimit;
+const requestOptions ={
+crossDomain: true,
+method: 'post',
+body: JSON.stringify(jsonModel),
+
+headers: {
+  "Content-Type": "application/json"
+}
+};
+fetch('http://localhost:5010/api/'+service,requestOptions)
+.then(res => res.json())
+.then(function (data) {
+  setLoadingResult(false);
+  var objData=JSON.parse(JSON.stringify(data));
+  handlegetLink(objData.datasetUrl);
+      // console.log(objData.datasetUrl);
+  //     //console.log(JSON.stringify(data).);
+  //   //setrequestId(JSON.stringify(data).requestId);
+  //   setresultUrl(objData.datasetUrl);
+})
+.catch((error) => console.log(error));;
+};
+
 
 
 
@@ -291,35 +275,6 @@ const handlesendResult= (e, service) => {
 
 
 
-
-
-  // const handlegetLinkAlter=()=>
-  // {
-  //   var tempRes=(
-  //     <div class="modal fade" id="myModal" role="dialog">
-  //     <div class="modal-dialog">
-      
-  //       {/* <!-- Modal content--> */}
-  //       <div class="modal-content">
-  //         <div class="modal-header">
-  //           <button type="button" class="close" data-dismiss="modal"></button>
-  //           <h4 class="modal-title">Modal Header</h4>
-  //         </div>
-  //         <div class="modal-body">
-  //           <p>Some text in the modal.</p>
-  //         </div>
-  //         <div class="modal-footer">
-  //           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-  //         </div>
-  //       </div>
-        
-  //     </div>
-  //   </div>);
-  //   setdialogRes( tempRes);
-  // }
-
-
-  
   const handlegetLink=(linkData)=>
   {
     
@@ -329,6 +284,43 @@ const handlesendResult= (e, service) => {
     </div>))
   }
 
+
+
+
+
+  // const handlegetResult= (e, service) => {
+  //   const payload = buildPayloadgetResult(service);
+  //   requestgetResult(payload, service);
+  //   //setAction('analyze');
+  //   };
+    
+  //   const buildPayloadgetResult = (service) => {
+  //   let jsonModel = {};
+  //     jsonModel["suppressionLimit"] = suppressionLimit;
+  //     return jsonModel
+  //   };
+    
+  //   const  requestgetResult= (payload, service) => {
+  //   const requestOptions ={
+  //   crossDomain: true,
+  //   method: 'post',
+  //   body: JSON.stringify(payload),
+    
+  //   headers: {
+  //     "Content-Type": "application/json"
+  //   }
+  //   };
+  //   fetch('http://localhost:5010/api/'+service,requestOptions)
+  //   .then(res => res.json())
+  //   .then(function (data) {
+  //     var objData=JSON.parse(JSON.stringify(data));
+  //     console.log(objData.datasetUrl);
+  //     //console.log(JSON.stringify(data).);
+  //   //setrequestId(JSON.stringify(data).requestId);
+  //   setresultUrl(objData.datasetUrl);
+  //   })
+  //   .catch((error) => console.log(error));;
+  //   };
 
   let content = (
      <div className="col-lg-12 text-center">
@@ -368,12 +360,12 @@ const handlesendResult= (e, service) => {
           <div className="row-lg-6" align="center">
           <table >
           {attributes.map(({ field }, index) =>
-            (<Attribute
+            (<AttributeCheckBox
               name={field}
               key={field}
               index={index}
               handleTypeSelect={handleTypeSelect}
-              handleHierarchyUpload={handleHierarchyUpload}
+            //   handleHierarchyUpload={handleHierarchyUpload}
             />))}
         </table>
           </div>
@@ -385,17 +377,15 @@ const handlesendResult= (e, service) => {
       </div>
 
 
-     
-        <button className="btn btn-primary"  onClick={(e) => handleRequest(e, 'anonymize')}>
+      <button className="btn btn-primary" onClick={(e) => handleRequest(e, 'anonymize')}>
             Anonymize
-        </button>
+            </button>
             {renderWaitAnony}
-     
 
 
       </div>
         <div className="col-lg-6"  align="center" style={{ paddingRight:'15rem'}}>
-      <div className="card border-primary mb-3" style={{ maxWidth: '60rem',minHeight: '20.3rem',maxHeight: '20.3rem',overflow:'auto' }}>
+      <div className="card border-primary mb-3" style={{ maxWidth: '60rem',minHeight: '19.3rem', maxHeight: '35.2rem',overflow:'auto' }}>
         <div className="card-header" style={{backgroundColor: '#1E90FF',color:'white'}}>Privacy model</div>
         <div className="card-body">
 
@@ -414,31 +404,12 @@ const handlesendResult= (e, service) => {
         </div>
       </div>
 
-      <div className="card border-primary mb-3" style={{ maxWidth: '60rem',minHeight: '14rem',maxHeight: '14rem',overflow:'auto' }}>
-        <div className="card-header" style={{backgroundColor: '#1E90FF',color:'white'}}>Suppression limit</div>
-        <div className="card-body">
-
-          <RenderSuppressionLimit
-              suppressionLimit = {suppressionLimit}
-              handleSuppressionLimitAdd = {handleSuppressionLimitAdd}
-              handleSuppressionLimitRemove = {handleSuppressionLimitRemove}
-          />
-
-        </div>
-      </div>
-        
+   
      
       {/* <button className="btn btn-primary" onClick={(e) => handlesendJson(e, 'sendJsonAnony')}>
             sendJsonAnony
-              </button>
-      <button className="btn btn-primary" onClick={(e) => handlesendResult(e, 'sendResultAnony')}>
-            sendResult
               </button> */}
-      {/* <button className="btn btn-primary" onClick={(e) => handlegetResult(e, 'getResultAnony')}>
-            Result
-              </button>
-              {link} */}
-              {/* <button className="btn btn-primary" onClick={(e) => handlesendResult(e, 'sendResultAnony')}>
+      {/* <button className="btn btn-primary" onClick={(e) => handlesendResult(e, 'sendResultAnony')}>
             sendResult
               </button> */}
       <button className="btn btn-primary" onClick={(e) => handlegetResult(e, 'getResultAnony')}>
@@ -446,6 +417,12 @@ const handlesendResult= (e, service) => {
               </button>
               {renderWaitResult}
               {link}
+              
+              
+              {/* <button className="btn btn-primary" onClick={(e) => handlegetLink()}>
+            Result
+              </button>
+              {link} */}
 
               {/* <button className="btn btn-primary" onClick={(e) => handlegetLink()}>
             getLink
@@ -465,4 +442,4 @@ const handlesendResult= (e, service) => {
 
   return content;
 };
-export default Anonymise
+export default Simple

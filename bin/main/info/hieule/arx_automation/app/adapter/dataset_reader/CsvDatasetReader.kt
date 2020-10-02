@@ -11,7 +11,7 @@ import java.nio.file.Paths
 class CsvDatasetReader(private val filePath: Path, private val separator: Char = ';') : DatasetReader {
     override fun read(): Dataset {
         val reader = Files.newBufferedReader(filePath)
-        val csvParser = CSVParser(reader, CSVFormat.newFormat(';'))
+        val csvParser = CSVParser(reader, CSVFormat.newFormat(separator))
 
         val dataRows: ArrayList<Array<String>> = arrayListOf()
         for (csvRecord in csvParser) {
