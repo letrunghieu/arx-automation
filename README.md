@@ -48,7 +48,7 @@ Các tập dữ liệu được lưu trong database `anonymization` của MongoD
 docker-compose up
 
 docker-compose exec -u root ckan bash
-ckan -c /etc/ckan/ckan.ini sysadmin add ckan email=letrunghieu.cse09@gmail.com name=ckan
+ckan -c /etc/ckan/ckan.ini sysadmin add ckan email=admin@gmail.com name=ckan
 chown ckan:ckan -r /var/lib/ckan/storage/uploads/
 
 # #2 console
