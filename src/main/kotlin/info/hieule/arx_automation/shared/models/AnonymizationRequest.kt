@@ -11,7 +11,8 @@ data class AnonymizationRequest(
     val hierarchies: Array<HierarchyAttributeInfo> = arrayOf(),
     val sensitiveAttributes: Array<String> = arrayOf(),
     val identifierAttributes: Array<String> = arrayOf(),
-    val anonymizeModelConfigs: Map<String, Any> = mapOf()
+    val anonymizeModelConfigs: Map<String, Any> = mapOf(),
+    val originalFileName: String? = null
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

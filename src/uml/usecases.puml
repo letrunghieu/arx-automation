@@ -1,0 +1,59 @@
+@startuml
+
+package use_cases {
+    interface UseCase {
+        execute(request)
+    }
+    class AnonymizingData
+}
+
+package ports {
+    interface DataProvider {
+        Data: getData()
+    }
+    interface ResultsConsumer {
+        consume(result, data, request)
+    }
+}
+
+package app.adapter {
+    class AnonymizationRequestDataProvider {
+        + Data: getData()
+    }
+
+    class CkanResultsConsumer {
+        + consume(result, data, request)
+        - createTmpCsv()
+        - generatePackageName()
+        - createPackage()
+        - uploadResource()
+    }
+}
+
+package shared.models {
+    class AnonymizationRequest
+}
+
+class ARXAnonymizer
+
+UseCase <|-- AnonymizingData
+AnonymizingData o-- DataProvider
+AnonymizingData o-- ResultsConsumer
+AnonymizingData o-- ARXAnonymizer
+
+
+DataProvider <|-- AnonymizationRequestDataProvider
+
+
+ResultsConsumer <|-- CkanResultsConsumer
+
+DefaultResultsConsumer o-- MongoDatabase
+DefaultResultsConsumer o-- RabbitTemplate
+
+AnonymizationRequestDataProvider o-- AnonymizationRequest
+AnonymizationRequestDataProvider o-- MongoDatabase
+
+AnonymizingData -- AnonymizationRequest
+
+
+@enduml

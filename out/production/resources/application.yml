@@ -30,7 +30,7 @@ app:
 
   ckan:
     hostname: "http://localhost:5000"
-    apiKey: "f1c66848-b28d-4181-ae07-48b747570031"
+    apiKey: "540218a3-8681-491e-9e74-285964c7cb46"
     organization: "demo-organization"
     defaultLicense: "odc-odbl"
 

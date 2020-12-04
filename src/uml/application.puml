@@ -1,0 +1,60 @@
+@startuml
+
+package ports {
+    interface DataProvider {
+        Data: getData()
+    }
+    interface ResultsConsumer {
+        consume(result, data, request)
+    }
+}
+
+package use_cases {
+    interface UseCase {
+        execute(request)
+    }
+}
+
+package app {
+    class AnonymizationReceiver <<RabbitMq Handler>> {
+        + receive(message)
+    }
+}
+
+package app.adapter {
+    class AnonymizationRequestDataProvider {
+        + Data: getData()
+    }
+
+    class CkanResultsConsumer {
+        + consume(result, data, request)
+        - createTmpCsv()
+        - generatePackageName()
+        - createPackage()
+        - uploadResource()
+    }
+}
+
+DataProvider <|-- AnonymizationRequestDataProvider
+ResultsConsumer <|-- CkanResultsConsumer
+
+AnonymizationReceiver o-- ObjectMapper
+AnonymizationReceiver o-- MongoDatabase
+AnonymizationReceiver o-- ResultsConsumer
+AnonymizationReceiver *-- DataProvider
+AnonymizationReceiver *-- UseCase
+
+
+interface DatasetReader {
+    Dataset: read()
+}
+AnonymizationRequestDataProvider *-- DatasetReader
+
+DatasetReader <|-- MongoDatasetReader
+DatasetReader <|-- CkanDatasetReader
+
+CkanResultsConsumer o-- ObjectMapper
+CkanResultsConsumer o-- RabbitTemplate
+CkanResultsConsumer o-- CkanConnectorConfiguration
+
+@enduml

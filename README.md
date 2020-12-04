@@ -38,3 +38,23 @@ Chạy công cụ ẩn danh hoá cho yêu cầu vừa tạo
 ```
 
 Các tập dữ liệu được lưu trong database `anonymization` của MongoDB. Truy cập giao diện quản lý của MongoDB tại `http://localhost:8081`, các tập dữ liệu được định danh thông qua `_id`.
+
+
+## Demo
+
+```shell script
+docker-compose up
+
+docker-compose exec -u root ckan bash
+ckan -c /etc/ckan/ckan.ini sysadmin add ckan email=letrunghieu.cse09@gmail.com name=ckan
+chown ckan:ckan -r /var/lib/ckan/storage/uploads/
+
+npm i
+npm start
+
+cd my-app
+npm i
+npm start
+
+./gradlew bootRun
+```

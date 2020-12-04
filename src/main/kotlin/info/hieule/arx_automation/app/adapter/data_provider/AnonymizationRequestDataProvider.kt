@@ -2,12 +2,14 @@ package info.hieule.arx_automation.app.adapter.data_provider
 
 import com.mongodb.client.MongoDatabase
 import info.hieule.arx_automation.app.adapter.dataset_reader.CkanDatasetReader
+import info.hieule.arx_automation.app.adapter.dataset_reader.CsvDatasetReader
 import info.hieule.arx_automation.app.adapter.dataset_reader.MongoDbDatasetReader
 import info.hieule.arx_automation.ports.DataProvider
 import info.hieule.arx_automation.shared.models.AnonymizationRequest
 import info.hieule.arx_automation.shared.models.Dataset
 import org.deidentifier.arx.AttributeType
 import org.deidentifier.arx.Data
+import java.nio.file.Paths
 
 class AnonymizationRequestDataProvider(
     private val request: AnonymizationRequest,
@@ -33,7 +35,11 @@ class AnonymizationRequestDataProvider(
         for (hierarchy in this.request.hierarchies) {
             quasiIdentifierAttributes.add(hierarchy.attribute)
 
-            val hierarchyDataset = MongoDbDatasetReader(this.mongoDatabase, HIERARCHIES_COLLECTION, hierarchy.datasetId).read()
+            val hierarchyDataset = if (this.request.originalFileName != null && this.request.originalFileName.isNotEmpty()) {
+                this.getCsvAttributeDataset(this.request.originalFileName.replace("_int.csv", "", true), hierarchy.attribute)
+            } else {
+                MongoDbDatasetReader(this.mongoDatabase, HIERARCHIES_COLLECTION, hierarchy.datasetId ?: "").read()
+            }
             data.definition.setAttributeType(hierarchy.attribute, AttributeType.Hierarchy.create(hierarchyDataset.data))
         }
 
@@ -64,5 +70,11 @@ class AnonymizationRequestDataProvider(
 
     private fun getCkanDataset(datasetId: String): Dataset {
         return CkanDatasetReader(datasetId).read()
+    }
+
+    private fun getCsvAttributeDataset(datasetName: String, attributeName: String): Dataset {
+        val datasetFilePath = Paths.get("hierarchies", "${datasetName}_int_hierarchy_${attributeName}.csv")
+
+        return CsvDatasetReader(datasetFilePath).read()
     }
 }
