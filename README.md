@@ -43,18 +43,23 @@ Các tập dữ liệu được lưu trong database `anonymization` của MongoD
 ## Demo
 
 ```shell script
+
+# #1 console
 docker-compose up
 
 docker-compose exec -u root ckan bash
 ckan -c /etc/ckan/ckan.ini sysadmin add ckan email=letrunghieu.cse09@gmail.com name=ckan
 chown ckan:ckan -r /var/lib/ckan/storage/uploads/
 
+# #2 console
 npm i
 npm start
 
+# #3 console
 cd my-app
 npm i
 npm start
 
+# #4 console
 ./gradlew bootRun
 ```

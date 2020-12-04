@@ -156,7 +156,8 @@ var renderWaitResult=(<div className="sweet-loading" >
    // setArxResp(JSON.parse(JSON.stringify(data)));
     //setArxResp(data);
   })
-  .catch((error) => console.log(error));;
+  .catch((error) => console.log(error));
+  console.log(payload.title);
 };
 
 

@@ -49,8 +49,8 @@ var outputDatasetsConstruction = new mongoose.Schema(
 
 var requestsConstruction = new mongoose.Schema(
     {
-		title: String,
-		originalFileName:String,
+        title: String,
+        originalFileName: String,
         datasetId: String,
         hierarchies: Array,
         sensitiveAttributes: Array,
@@ -58,7 +58,7 @@ var requestsConstruction = new mongoose.Schema(
         anonymizeModelConfigs: {
             suppressionLimit: Number,
             k: Number,
-            l:Number
+            l: Number
         }
     }
 )
@@ -79,54 +79,48 @@ function convertDatatoHieu(dataBody) {
     var identifier = [];
     var anonymizeModel = {};
     var hierarchy = [];
-	//console.log(data);
-	for (var i = 0; i < dataBody.privacyModels.length; i++) {
+    //console.log(data);
+    for (var i = 0; i < dataBody.privacyModels.length; i++) {
         if (dataBody.privacyModels[i].privacyModel === "KANONYMITY") {
             anonymizeModel['k'] = parseInt(dataBody.privacyModels[i].params.k);
         } else if (dataBody.privacyModels[i].privacyModel === "LDIVERSITY_DISTINCT") {
             anonymizeModel['l'] = parseInt(dataBody.privacyModels[i].params.l);
-			sensitive.unshift(dataBody.privacyModels[i].params.column_name);
-			for (var j = 0; j < dataBody.attributes.length; j++) {
-				if (dataBody.attributes[j].field===dataBody.privacyModels[i].params.column_name)
-				{
-					dataBody.attributes[j].attributeTypeModel="SENSITIVE";
-				}
+            sensitive.unshift(dataBody.privacyModels[i].params.column_name);
+            for (var j = 0; j < dataBody.attributes.length; j++) {
+                if (dataBody.attributes[j].field === dataBody.privacyModels[i].params.column_name) {
+                    dataBody.attributes[j].attributeTypeModel = "SENSITIVE";
+                }
             }
         }
-	}
-	
+    }
 
 
     for (var i = 0; i < dataBody.attributes.length; i++) {
-		///////////////hierarchies
-		if (dataBody.attributes[i].attributeTypeModel === "QUASIIDENTIFYING")
-		{
-        	if (dataBody.attributes[i].hierarchy) //neu co cay phan cap
-        	{
-            	var dataHierarchies = new hierarchies({data: dataBody.attributes[i].hierarchy});
+        ///////////////hierarchies
+        if (dataBody.attributes[i].attributeTypeModel === "QUASIIDENTIFYING") {
+            if (dataBody.attributes[i].hierarchy) //neu co cay phan cap
+            {
+                var dataHierarchies = new hierarchies({data: dataBody.attributes[i].hierarchy});
 
-            	dataHierarchies.save();
-            	var hierachyForrequest = {
-                	attribute: dataBody.attributes[i].field, //ten filed cua hierachy hien tai
-                	datasetId: dataHierarchies._id
-            	}
-            	hierarchy.push(hierachyForrequest);
-			}
-			else 
-			{
-				var hierachyForrequest = {
-                	attribute: dataBody.attributes[i].field, //ten filed cua hierachy hien tai
-                	datasetId: null
-            	}
-            	hierarchy.push(hierachyForrequest);
-			}
-		}
+                dataHierarchies.save();
+                var hierachyForrequest = {
+                    attribute: dataBody.attributes[i].field, //ten filed cua hierachy hien tai
+                    datasetId: dataHierarchies._id
+                }
+                hierarchy.push(hierachyForrequest);
+            } else {
+                var hierachyForrequest = {
+                    attribute: dataBody.attributes[i].field, //ten filed cua hierachy hien tai
+                    datasetId: null
+                }
+                hierarchy.push(hierachyForrequest);
+            }
+        }
 
         //////////////sensitive
         if (dataBody.attributes[i].attributeTypeModel === "SENSITIVE") {
-            if (sensitive.indexOf(dataBody.attributes[i].field) === -1)
-            {
-            sensitive.push(dataBody.attributes[i].field);
+            if (sensitive.indexOf(dataBody.attributes[i].field) === -1) {
+                sensitive.push(dataBody.attributes[i].field);
             }
         }
         ///////////////////// identifier
@@ -135,7 +129,6 @@ function convertDatatoHieu(dataBody) {
         }
     }
 
-    
 
     anonymizeModel['suppressionLimit'] = dataBody.suppressionLimit;
 
@@ -151,8 +144,8 @@ function convertDatatoHieu(dataBody) {
 
 
     var requestData = new requests({
-		title: dataBody.title,
-		originalFileName:dataBody.originalfileName,
+        title: dataBody.title,
+        originalFileName: dataBody.originalfileName,
         datasetId: datasetId,
         ckanUrl: ckanUrl,
         hierarchies: hierarchy,
@@ -170,8 +163,8 @@ function convertDatatoHieu(dataBody) {
     jsonModel['hierarchies'] = hierarchy;
     jsonModel['sensitiveAttributes'] = sensitive;
     jsonModel['identifierAttributes'] = identifier;
-	jsonModel['anonymizeModelConfigs'] = anonymizeModel;
-	jsonModel["originalFileName"]=dataBody.originalfileName;
+    jsonModel['anonymizeModelConfigs'] = anonymizeModel;
+    jsonModel["originalFileName"] = dataBody.originalfileName;
     console.log(jsonModel);
     return jsonModel;
 }
@@ -183,6 +176,23 @@ let chanelRequest = null;
 let chanelResult = null;
 var queueRequest = 'requests';
 var queueResult = 'results';
+
+
+
+const WebSocketServer = require('ws').Server;
+const wsServer = new WebSocketServer({
+    host: 'localhost',
+    port: 5011,
+    clientTracking: true,
+}, () => {console.log('WS server is ready');});
+
+
+wsServer.on('connection', function (ws, request) {
+    console.log("A new client is connected: " + wsServer.clients.size);
+    ws.send('Welcome!');
+});
+
+
 
 amqp.connect(urlMQ, function (err, conn) {
 
@@ -198,7 +208,18 @@ amqp.connect(urlMQ, function (err, conn) {
         //        durable: false
         //    });
         chanelResult = channel;
-        consumeFromQueue(chanelResult, queueResult);
+        // consumeFromQueue(chanelResult, queueResult);
+        chanelResult.consume('results', function (msg) {
+            console.log(" received 1 message");
+            tempData = JSON.stringify(JSON.parse(msg.content.toString()));
+            console.log(tempData);
+            wsServer.clients.forEach(ws => {
+                ws.send(tempData);
+            })
+            return tempData;
+        }, {
+            noAck: true
+        });
     });
 });
 //////////////////////////////////////bin
@@ -252,6 +273,11 @@ app.post('/api/anonymize', function (req, res) {
 
 
 const port = process.env.PORT || 5010;
-app.listen(port);
+// app.listen(port);
 
+
+const server = require('http').createServer(app);
+server.listen(port);
+
+wsServer.on('error', console.log);
 console.log('App is listening on port ' + port);
